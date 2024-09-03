@@ -18,7 +18,7 @@ const DriverRecruitment = () => {
       <div className="flex justify-center items-center">
         <div className="relative w-full max-w-8xl flex flex-col md:flex-row md:justify-between">
           {/* Left Side */}
-          <div className="flex flex-col justify-center md:w-[50%] lg:w-[40%]">
+          <div className="flex flex-col justify-center md:w-[50%] lg:w-[40%] pb-5">
             <h2 className="text-xl sm:text-2xl font-semibold text-primary mb-4">
               DO YOU WANT TO EARN WITH US?
             </h2>

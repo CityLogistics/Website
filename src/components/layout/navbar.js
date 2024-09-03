@@ -1,63 +1,125 @@
 import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link as ScrollLink } from "react-scroll";
 import MobileMenu from "./mobileMenu";
+import PropTypes from "prop-types";
+import { useRouter } from "next/router";
 
 export const routes = [
   {
     name: "Home",
-    path: "/",
+    path: "hero", // ID of the section
   },
   {
     name: "About Us",
-    path: "/about-us",
+    path: "about-us", // ID of the section
   },
   {
     name: "Our Vehicles",
-    path: "/our-vehicles",
+    path: "who-we-are", // ID of the section
   },
   {
     name: "Request Order",
-    path: "/request-order",
+    path: "request-delivery", // ID of the section
   },
   {
     name: "Enlist as a Driver",
-    path: "/enlist-as-a-driver",
+    path: "driver-recruitment", // ID of the section
   },
   {
     name: "Contact Us",
-    path: "/contact-us",
+    path: "footer", // ID of the section
   },
   {
     name: "Testimonials",
-    path: "/testimonials",
+    path: "testimonials", // ID of the section
   },
 ];
-const Navbar = () => {
+
+const Navbar = ({ isGradient }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const toggleMobileMenu = () => {
     setIsMobileOpen(!isMobileOpen);
   };
+  const router = useRouter();
+
+  const handleNavClick = (path) => {
+    if (isGradient) {
+      router.push("/").then(() => {
+        // Scroll to the target section after navigating to the homepage
+        const scrollToSection = document.getElementById(path);
+        if (scrollToSection) {
+          scrollToSection.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    } else {
+      // If already on the homepage, just scroll to the target section
+      const scrollToSection = document.getElementById(path);
+      if (scrollToSection) {
+        scrollToSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   return (
-    <nav className="w-full flex justify-center">
+    <nav
+      className={`w-full flex justify-center sticky top-0 left-0 z-[1000] transition-colors duration-300 ${
+        isScrolled && !isGradient
+          ? "bg-white"
+          : isScrolled && isGradient
+          ? "bg-[#2366d6]"
+          : "bg-transparent"
+      }`}
+    >
       <div className="w-full hidden md:block px-[5%] max-w-8xl">
         <div className="flex justify-center">
-          <Image
-            src="/images/logo.svg"
-            alt="nav-logo"
-            width={100}
-            height={100}
-          />
+          <div className="cursor-pointer">
+            <ScrollLink to="hero" smooth={true} duration={500} offset={-150}>
+              <Image
+                src={` ${
+                  isGradient ? "/images/logo_footer.svg" : "/images/logo.svg"
+                }`}
+                alt="nav-logo"
+                width={100}
+                height={100}
+              />
+            </ScrollLink>
+          </div>
         </div>
         <div className="w-full ">
-          <div className="w-full flex justify-between px-6 py-2 border-y-2 border-black">
+          <div
+            className={`w-full flex justify-between px-6 py-2 border-y-2 ${
+              isGradient ? "border-white" : "border-black"
+            } `}
+          >
             {routes.map((route) => (
               <div key={route.name}>
-                <Link href={route.path}>
-                  <p className="font-serif text-black text-base hover:text-primary">
-                    {route.name}
-                  </p>
-                </Link>
+                <p
+                  onClick={() => handleNavClick(route.path)}
+                  className={`cursor-pointer font-serif text-base hover:text-primary ${
+                    isGradient ? "text-white" : "text-black"
+                  }`}
+                >
+                  {route.name}
+                </p>
               </div>
             ))}
           </div>
@@ -65,19 +127,42 @@ const Navbar = () => {
       </div>
       <div className="w-full md:hidden px-6">
         <div className="flex items-center justify-between">
-          <Image
-            src="/images/logo.svg"
-            alt="nav-logo"
-            width={100}
-            height={100}
-          />
+          <div className="cursor-pointer">
+            <ScrollLink to="hero" smooth={true} duration={500} offset={-150}>
+              <Image
+                src={` ${
+                  isGradient ? "/images/logo_footer.svg" : "/images/logo.svg"
+                }`}
+                alt="nav-logo"
+                width={100}
+                height={100}
+              />
+            </ScrollLink>
+          </div>
           <button type="button" onClick={toggleMobileMenu}>
-            <Image
-              src="/images/hamburger.svg"
-              alt="hamburger"
-              width={40}
-              height={40}
-            />
+            {!isGradient ? (
+              <Image
+                src="/images/hamburger.svg"
+                alt="hamburger"
+                width={40}
+                height={40}
+              />
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-8 text-white"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                />
+              </svg>
+            )}
           </button>
         </div>
       </div>
@@ -85,9 +170,14 @@ const Navbar = () => {
         isMobileOpen={isMobileOpen}
         toggleMobileMenu={toggleMobileMenu}
         routes={routes}
+        isGradient={isGradient}
       />
     </nav>
   );
 };
 
 export default Navbar;
+
+Navbar.propTypes = {
+  isGradient: PropTypes.bool.isRequired,
+};

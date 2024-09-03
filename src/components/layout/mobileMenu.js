@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import { Link as ScrollLink } from "react-scroll";
 import PropTypes from "prop-types";
 
 export const socialMedia = [
@@ -14,8 +14,28 @@ export const socialMedia = [
   },
 ];
 
-function MobileMenu({ isMobileOpen, toggleMobileMenu, routes }) {
+function MobileMenu({ isMobileOpen, toggleMobileMenu, routes, isGradient }) {
   const router = useRouter();
+
+  const handleNavClick = (path) => {
+    toggleMobileMenu(); // Close the mobile menu first
+
+    if (isGradient) {
+      router.push("/").then(() => {
+        // Scroll to the target section after navigating to the homepage
+        const scrollToSection = document.getElementById(path);
+        if (scrollToSection) {
+          scrollToSection.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    } else {
+      // If already on the homepage, just scroll to the target section
+      const scrollToSection = document.getElementById(path);
+      if (scrollToSection) {
+        scrollToSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <div
@@ -26,8 +46,8 @@ function MobileMenu({ isMobileOpen, toggleMobileMenu, routes }) {
       <div className="">
         <div className="w-full h-[81px] px-[5.5%] shadow">
           <div className="flex items-center justify-between h-full">
-            <Link href="/">
-              <div className="relative w-32 h-20">
+            <ScrollLink to="hero" smooth={true} duration={500} offset={-150}>
+              <div className="relative w-32 h-20 cursor-pointer">
                 <Image
                   src="/images/logo.svg"
                   alt="nav-logo"
@@ -35,7 +55,7 @@ function MobileMenu({ isMobileOpen, toggleMobileMenu, routes }) {
                   objectFit="contain"
                 />
               </div>
-            </Link>
+            </ScrollLink>
             <button type="button" onClick={toggleMobileMenu}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -57,21 +77,16 @@ function MobileMenu({ isMobileOpen, toggleMobileMenu, routes }) {
       </div>
       <div className="px-[5.5%] mt-8">
         {routes.map((route) => (
-          <div key={route.name}>
-            <Link href={route.path}>
-              <p
-                className={`${
-                  router.pathname === route.path
-                    ? "text-primary underline"
-                    : "text-slate-300"
-                } mb-7 text-[20px] hover:text-primary font-semibold hover:underline underline-offset-8`}
-              >
-                {route.name}
-              </p>
-            </Link>
+          <div
+            key={route.name}
+            className="cursor-pointer mb-5 text-[18px] hover:text-primary font-semibold hover:underline underline-offset-8"
+            onClick={() => handleNavClick(route.path)} // This triggers the navigation logic
+          >
+            {route.name}
           </div>
         ))}
       </div>
+      {/* Uncomment and update the following block if you want to display address and social media links in the mobile menu */}
       {/* <div className="mt-[18vh] px-[5.5%]">
         <p className="text-[16px] text-[#1E293B] font-light">
           <span className="font-medium">Address:</span> 582 West Meadow Lane
@@ -105,4 +120,5 @@ MobileMenu.propTypes = {
   isMobileOpen: PropTypes.bool.isRequired,
   toggleMobileMenu: PropTypes.func.isRequired,
   routes: PropTypes.array.isRequired,
+  isGradient: PropTypes.bool.isRequired,
 };

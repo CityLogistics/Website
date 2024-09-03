@@ -10,16 +10,30 @@ import Footer from "@/components/layout/footer";
 export default function Home() {
   return (
     <div>
-      <div className="h-fit back-grad">
-        <Navbar />
-        <Hero />
-        <WhatWeDo />
-        <RequestDelivery />
-        <DriverRecruitment />
+      <Navbar />
+      <div className="h-fit bg-white">
+        <section id="hero">
+          <Hero />
+        </section>
+        <section id="what-we-do">
+          <WhatWeDo />
+        </section>
+        <section id="request-delivery">
+          <RequestDelivery />
+        </section>
+        <section id="driver-recruitment">
+          <DriverRecruitment />
+        </section>
       </div>
-      <AboutUs />
-      <WhoWeAre />
-      <Footer />
+      <section id="about-us">
+        <AboutUs />
+      </section>
+      <section id="who-we-are">
+        <WhoWeAre />
+      </section>
+      <section id="footer">
+        <Footer />
+      </section>
     </div>
   );
 }

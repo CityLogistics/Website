@@ -4,7 +4,7 @@ const WhatWeDo = () => {
     <div className="flex justify-center">
       <div className="px-[5%] max-w-8xl">
         <div
-          className="w-full bg-[url('/images/second_bg.svg')] py-8 rounded-5 md:rounded-[65px] mt-[40vh] sm:mt-[50vh] md:mt-[80vh] lg:mt-[80vh] relative z-0"
+          className="w-full bg-[url('/images/second_bg.svg')] py-8 rounded-5 md:rounded-[65px] mt-[35vh] sm:mt-[35vh] md:mt-[80vh] lg:mt-[70vh] relative z-0"
           style={{
             backgroundPosition: "center center",
             backgroundSize: "cover",
