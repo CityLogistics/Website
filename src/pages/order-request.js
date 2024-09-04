@@ -6,7 +6,7 @@ const OrderRequest = () => {
   return (
     <div>
       <div
-        className="relative w-full bg-[url('/images/hero_bg.svg')] h-[800px]"
+        className="relative w-full bg-[url('/images/hero_bg.svg')] md:h-[800px]"
         style={{
           backgroundPosition: "center center",
           backgroundSize: "cover",
@@ -17,7 +17,7 @@ const OrderRequest = () => {
         <Navbar isGradient />
         <OrderHero />
       </div>
-      <div className="mt-[100vh]">
+      <div className="mt-3 md:mt-[80vh]">
         <Footer />
       </div>
     </div>

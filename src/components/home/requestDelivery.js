@@ -143,7 +143,7 @@ const RequestDelivery = () => {
 
 export default RequestDelivery;
 
-const deliveryOptions = [
+export const deliveryOptions = [
   {
     title: "SUV & MINIVAN FOR BELOW 50KG",
     description: "Parcels that optimally fit a standard SUV / Mini Van.",

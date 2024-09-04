@@ -62,19 +62,34 @@ const Navbar = ({ isGradient }) => {
   const router = useRouter();
 
   const handleNavClick = (path) => {
+    const offset = -150; // Adjust this value based on the height of your navbar or any other fixed element
+
     if (isGradient) {
       router.push("/").then(() => {
         // Scroll to the target section after navigating to the homepage
         const scrollToSection = document.getElementById(path);
         if (scrollToSection) {
-          scrollToSection.scrollIntoView({ behavior: "smooth" });
+          const rect = scrollToSection.getBoundingClientRect();
+          const scrollTop =
+            window.scrollY || document.documentElement.scrollTop;
+          const elementTop = rect.top + scrollTop;
+          window.scrollTo({
+            top: elementTop + offset,
+            behavior: "smooth",
+          });
         }
       });
     } else {
       // If already on the homepage, just scroll to the target section
       const scrollToSection = document.getElementById(path);
       if (scrollToSection) {
-        scrollToSection.scrollIntoView({ behavior: "smooth" });
+        const rect = scrollToSection.getBoundingClientRect();
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const elementTop = rect.top + scrollTop;
+        window.scrollTo({
+          top: elementTop + offset,
+          behavior: "smooth",
+        });
       }
     }
   };

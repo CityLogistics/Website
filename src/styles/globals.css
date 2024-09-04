@@ -7,3 +7,70 @@
     background: linear-gradient(to bottom, #FFEFE2, #FFFFFF, #FFEFE2);
   }
 }
+
+
+.success-container {
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+
+.icon {
+  margin-bottom: 1rem;
+}
+
+.success-icon img {
+  width: 80px;
+  height: 80px;
+}
+
+.failure-icon img {
+  width: 80px;
+  height: 80px;
+}
+
+.success-h1 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.success-p {
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+.success-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007bff;
+  transition: background-color 0.3s ease;
+}
+
+.success-button:hover {
+  background-color: #0056b3;
+}
+
+.success {
+  border-left: 5px solid #28a745;
+}
+
+.failure {
+  border-left: 5px solid #dc3545;
+}
+
+.centered-image {
+  position: absolute;
+  bottom: -10vh;
+  left: 50%;
+  transform: translate(0, -50%);
+}

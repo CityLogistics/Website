@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import Head from "next/head";
 import { Antonio } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 const antonio = Antonio({
   weight: ["100", "300", "400", "500"],
@@ -17,7 +18,7 @@ export default function App({ Component, pageProps }) {
       </Head>
       <main className={`${antonio.variable} font-sans`}>
         <Component {...pageProps} />
-        {/* <Toaster position="top-right" reverseOrder={false} /> */}
+        <Toaster position="top-right" reverseOrder={false} />
       </main>
     </>
   );

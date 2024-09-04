@@ -57,7 +57,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["var(--font-antonio)", ...fontFamily.sans],
-        serif: ["Helvetica", "Arial", "sans-serif"], // First font
+        serif: ["Helvetica", "Arial", "sans-serif"],
       },
       boxShadow: {
         sm: "0 1px 2px 0 rgba(16, 24, 40, 0.05)",
