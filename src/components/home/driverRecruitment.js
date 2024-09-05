@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
 import PrimaryButton from "../elements/primaryButton";
+import { useRouter } from "next/router";
 
 const benefits = [
   { text: "No Registration Fees", icon: "/images/document_icon.svg" },
@@ -13,6 +14,7 @@ const benefits = [
 ];
 
 const DriverRecruitment = () => {
+  const router = useRouter();
   return (
     <div className="mt-[60px] px-[5%]">
       <div className="flex justify-center items-center">
@@ -41,7 +43,11 @@ const DriverRecruitment = () => {
                 </div>
               ))}
             </div>
-            <PrimaryButton>BECOME A DRIVER</PrimaryButton>
+            <PrimaryButton
+              handleClick={() => router.push("/driver-qualification")}
+            >
+              BECOME A DRIVER
+            </PrimaryButton>
           </div>
 
           {/* Right Side */}

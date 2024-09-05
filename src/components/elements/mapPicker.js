@@ -4,7 +4,6 @@ import usePlacesAutocompleteService from "react-google-autocomplete/lib/usePlace
 import Loader from "../Loader";
 
 export default function MapPicker({ onChange, inputField, ...inputProps }) {
-  console.info({ inputProps });
   const [open, setOpen] = useState();
   const { placePredictions, getPlacePredictions, isPlacePredictionsLoading } =
     usePlacesAutocompleteService({

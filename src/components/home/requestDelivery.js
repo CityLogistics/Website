@@ -151,6 +151,7 @@ export const deliveryOptions = [
     image: "/images/suv_minivan.svg",
     backgroundImage: "/images/person-1.svg",
     footerText: "BELOW 50KG",
+    value: "SALON",
   },
   {
     title: "LARGE (BUS)",
@@ -159,6 +160,7 @@ export const deliveryOptions = [
     image: "/images/large_bus.svg",
     backgroundImage: "/images/person-2.svg",
     footerText: "LARGE",
+    value: "FIVE_SEATER_SUV",
   },
   {
     title: "EXTRA LARGE (TRUCK)",
@@ -167,5 +169,6 @@ export const deliveryOptions = [
     image: "/images/extra_large_truck.svg",
     backgroundImage: "/images/person-3.svg",
     footerText: "EXTRA LARGE",
+    value: "TRUCK",
   },
 ];

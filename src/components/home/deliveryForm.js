@@ -9,49 +9,6 @@ import { useRouter } from "next/navigation";
 
 /* eslint-disable react/no-unescaped-entities */
 const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
-  async function codeAddress(place) {
-    const { place_id, description } = place;
-
-    console.info({ place_id, description });
-
-    const geocoder = new google.maps.Geocoder();
-
-    return new Promise((resolve, reject) => {
-      geocoder.geocode({ placeId: place_id }, function (results, status) {
-        if (status == "OK") {
-          if (results[0]) {
-            const province = results[0].address_components.find(
-              (v) => v.types[0] == "administrative_area_level_1"
-            )?.long_name;
-
-            console.info({
-              lat: results[0].geometry?.location?.lat(),
-              lng: results[0].geometry?.location?.lng(),
-              province,
-              country: "string",
-              address: description,
-              placeId: place_id,
-            });
-
-            resolve({
-              province: province.toUpperCase(),
-              country: "string",
-              address: description,
-              placeId: place_id,
-              lat: results[0].geometry?.location?.lat(),
-              lng: results[0].geometry?.location?.lng(),
-            });
-          }
-        } else {
-          alert(
-            "Geocode was not successful for the following reason: " + status
-          );
-          reject("not found");
-        }
-      });
-    });
-  }
-
   const ready = async () => {
     console.info("done");
   };
@@ -99,21 +56,21 @@ const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.info({ values });
-      const { pickup, dropoff, ...others } = values;
+      // const { pickup, dropoff, ...others } = values;
 
-      const [pickupLoc, dropOffLoc] = await Promise.all([
-        codeAddress(pickup),
-        codeAddress(dropoff),
-      ]);
+      // const [pickupLoc, dropOffLoc] = await Promise.all([
+      //   codeAddress(pickup),
+      //   codeAddress(dropoff),
+      // ]);
 
-      const payload = {
-        ...others,
+      // const payload = {
+      //   ...others,
 
-        pickup: pickupLoc,
-        dropoff: dropOffLoc,
-      };
-      console.log(payload);
-      localStorage.setItem("payload", JSON.stringify(payload));
+      //   pickup: pickupLoc,
+      //   dropoff: dropOffLoc,
+      // };
+      // console.log(payload);
+      localStorage.setItem("payload", JSON.stringify(values));
       router.push("/order-request");
       // Add your form submission logic here
     },

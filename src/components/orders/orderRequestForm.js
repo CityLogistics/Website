@@ -6,13 +6,16 @@ import { useEffect, useState } from "react";
 import ConfirmOrderModal from "./confirmationModal";
 import { instance } from "@/apis";
 import MapPicker from "../elements/mapPicker";
+import Loader from "../Loader";
+import { codeAddress, getDistace, parseError } from "@/utils";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const OrderRequestForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => {
-    setIsModalOpen(true);
+  const openModal = (distance) => {
+    setIsModalOpen(distance);
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -35,18 +38,21 @@ const OrderRequestForm = () => {
       .string("Enter recipient's phone number")
       .required("Recipient's phone number is required"),
     pickup: yup.object({
-      address: yup
+      description: yup
         .string("Enter pick up address")
         .required("Pick up address is required"),
     }),
     dropoff: yup.object({
-      address: yup
+      description: yup
         .string("Enter drop off address")
         .required("Drop off address is required"),
     }),
     discription: yup
       .string("Enter discription")
       .required("Discription is required"),
+    pickuptime: yup
+      .string("Enter pickup time")
+      .required("Pickup time is required"),
   });
 
   const formik = useFormik({
@@ -59,31 +65,89 @@ const OrderRequestForm = () => {
       discription: "",
       dropoff: {},
       pickup: {},
+      pickuptime: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      openModal();
+      setLoading(true);
+      const { pickup, dropoff } = values;
+      console.info({ pickup, dropoff });
+      const [pickupLoc, dropOffLoc] = await Promise.all([
+        codeAddress(pickup),
+        codeAddress(dropoff),
+      ]);
+
+      const payload = {
+        destinations: [
+          {
+            lat: dropOffLoc.lat,
+            lng: dropOffLoc.lng,
+          },
+        ],
+        origins: [
+          {
+            lat: pickupLoc.lat,
+            lng: pickupLoc.lng,
+          },
+        ],
+      };
+      const { distance, status } = await getDistace(payload);
+      setLoading(false);
+
+      if (status == "OK") {
+        console.info({ distance, pickupLoc, pickupLoc });
+        openModal({
+          ...distance,
+          pickUpProvince: pickupLoc.province,
+          dropOffProvince: dropOffLoc.province,
+          pickupLoc,
+          dropOffLoc,
+        });
+      } else toast.error("Invalid pickup or dropoff address ");
     },
   });
 
-  const onConfirm = async () => {
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+
+  const onConfirm = async (vehicleType) => {
+    const { pickupLoc, dropOffLoc } = isModalOpen;
     closeModal();
+    setLoading(true);
     const { senderPhone, recipientPhone, pickup, dropoff, ...values } =
       formik.values;
+
+    // const [pickupLoc, dropOffLoc] = await Promise.all([
+    //   codeAddress(pickup),
+    //   codeAddress(dropoff),
+    // ]);
+
     try {
       const payload = {
         pickupDate: new Date().toISOString(),
         pickupPhoneNumber: senderPhone,
         dropOffPhoneNumber: recipientPhone,
         type: "HEALTH_AND_MEDICINE",
-        vehicleType: "SALON",
+        // vehicleType: "SALON",
+        vehicleType,
         ...values,
-        pickupAddress: pickup,
-        dropOffAddress: dropoff,
+        pickupAddress: pickupLoc,
+        dropOffAddress: dropOffLoc,
       };
-      const res = await instance.post("/orders", payload);
-      console.info({ res });
-    } catch (error) {}
+      // console.log(payload);
+
+      const { status, error, data } = await instance.post("/orders", payload);
+      setLoading(false);
+      if (status == 201 && data) {
+        console.info({ data });
+        router.push(data.paymentUrl);
+      } else toast.error(parseError(error));
+    } catch (error) {
+      setLoading(false);
+
+      toast.error(parseError(error));
+    }
   };
 
   const handlePickUpLocationChange = (val, filed) => {
@@ -94,9 +158,10 @@ const OrderRequestForm = () => {
   useEffect(() => {
     const res = JSON.parse(localStorage.getItem("payload"));
     formik.setValues(res);
-    console.info({ res });
+    // formik.se(res);
+    // console.info({ res });
   }, []);
-  console.info(formik.values);
+  // console.info(formik.values);
 
   return (
     <div>
@@ -135,13 +200,13 @@ const OrderRequestForm = () => {
               name="pickup"
               title="Pick Up Location"
               placeholder="The pick-up address"
-              value={formik.values.pickup?.address}
+              value={formik.values.pickup?.description}
               // onChange={handlePickUpLocationChange}
               onBlur={formik.handleBlur}
               // error={pickupError}
             />
           )}
-          value={formik.values.pickup?.address}
+          value={formik.values.pickup?.description}
           onChange={(e) => handlePickUpLocationChange(e, "pickup")}
         />
         <FilledInput
@@ -167,13 +232,13 @@ const OrderRequestForm = () => {
         />
         <FilledInput
           type="time"
-          name="pickupTime"
+          name="pickuptime"
           title="Pickup Time"
           placeholder="Select time..."
-          value={formik.values.pickupTime}
+          value={formik.values.pickuptime}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.pickupTime && formik.errors.pickupTime}
+          error={formik.touched.pickuptime && formik.errors.pickuptime}
         />
 
         <FilledInput
@@ -194,13 +259,13 @@ const OrderRequestForm = () => {
               name="dropOffLocation"
               title="Drop Off Location"
               placeholder="The drop-off address"
-              value={formik.values.dropoff?.address}
+              value={formik.values.dropoff?.description}
               // onChange={handleDropOffLocationChange}
               onBlur={formik.handleBlur}
               // error={dropOffError}
             />
           )}
-          value={formik.values.dropoff?.address}
+          value={formik.values.dropoff?.description}
           onChange={(e) => handlePickUpLocationChange(e, "dropoff")}
         />
 
@@ -226,21 +291,29 @@ const OrderRequestForm = () => {
         />
 
         <div className="flex justify-center mt-6">
-          <PrimaryButton type="submit" disabled={!formik.isValid}>
-            SUBMIT YOUR REQUEST
+          <PrimaryButton
+            type="submit"
+            disabled={!formik.isValid}
+            customStyle="w-full"
+          >
+            {loading ? (
+              <Loader dotClassess="bg-white" />
+            ) : (
+              "SUBMIT YOUR REQUEST"
+            )}
           </PrimaryButton>
         </div>
       </form>
       <ConfirmOrderModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        pickUpLocation={formik.values.pickup?.address}
+        pickUpLocation={formik.values.pickup}
         // pickupError={pickupError}
         // dropOffError={dropOffError}
-        dropOffLocation={formik.values.dropoff?.address}
+        dropOffLocation={formik.values.dropoff}
         // handleDropOffLocationChange={handleDropOffLocationChange}
         // handlePickUpLocationChange={handlePickUpLocationChange}
-        onConfirm={onConfirm}
+        onConfirm={(vehicleType) => onConfirm(vehicleType)}
       />
     </div>
   );

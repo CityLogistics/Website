@@ -4,44 +4,61 @@ import * as yup from "yup";
 import FilledInput from "../elements/filledInput";
 import Dropdown from "../elements/dropdown";
 import PrimaryButton from "../elements/primaryButton";
+import Loader from "../Loader";
+import { useState } from "react";
 
 const DriverRequestForm = () => {
   // Validation schema
   const validationSchema = yup.object({
-    driverName: yup.string().required("Driver's name is required"),
+    firstName: yup.string().required("Driver's first name is required"),
+    lastName: yup.string().required("Driver's last name is required"),
     phoneNumber: yup.string().required("Phone number is required"),
     email: yup.string().email("Invalid email").required("Email is required"),
-    vehicle: yup.string().required("Vehicle type is required"),
-    license: yup.string().required("Valid license is required"),
-    insurance: yup.string().required("Insurance status is required"),
-    availability: yup.string().required("Availability is required"),
-    timeAvailable: yup.string().required("Time available is required"),
-    deliveryZone: yup.string().required("Delivery zone is required"),
+    ownVehicle: yup.string().required("Vehicle ownership status is required"),
+    vehicleType: yup.string().required("Vehicle type is required"),
+    hasValidLicense: yup.string().required("Valid license is required"),
+    hasValidVehicleInsurance: yup
+      .string()
+      .required("Insurance status is required"),
+    availabiltyDays: yup.string().required("Availability is required"),
+    availabiltyTime: yup.string().required("Time available is required"),
+    preferredTimeZone: yup.string().required("Delivery zone is required"),
   });
+
+  const [loading, setLoading] = useState(false);
 
   // Formik hook
   const formik = useFormik({
     initialValues: {
-      driverName: "",
-      phoneNumber: "",
+      firstName: "",
+      lastName: "",
       email: "",
-      vehicle: "",
-      license: "",
-      insurance: "",
-      availability: "",
-      timeAvailable: "",
-      deliveryZone: "",
+      phoneNumber: "",
+      image: "",
+      ownVehicle: true,
+      vehicleType: "",
+      hasValidLicense: true,
+      hasValidVehicleInsurance: true,
+      availabiltyDays: "",
+      availabiltyTime: "",
+      preferredTimeZone: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-      toast.success("Your request has been sent", {
-        duration: 4000,
-      });
+    onSubmit: async (values) => {
+      setLoading(true);
 
-      toast.error("Something went wrong", {
-        duration: 4000,
-      });
+      try {
+        const { status, error, data } = await instance.post("/drivers", values);
+        setLoading(false);
+        if (status == 201 && data) {
+          console.info({ data });
+          router.push(data.paymentUrl);
+        } else toast.error(parseError(error));
+      } catch (error) {
+        setLoading(false);
+
+        toast.error(parseError(error));
+      }
     },
   });
 
@@ -86,13 +103,24 @@ const DriverRequestForm = () => {
 
         <FilledInput
           type="text"
-          name="driverName"
+          name="firstName"
           title="Driver's Name"
-          placeholder="Your name"
-          value={formik.values.driverName}
+          placeholder="Your first name"
+          value={formik.values.firstName}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.driverName && formik.errors.driverName}
+          error={formik.touched.firstName && formik.errors.firstName}
+        />
+
+        <FilledInput
+          type="text"
+          name="lastName"
+          title="Driver's Name"
+          placeholder="Your last name"
+          value={formik.values.lastName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.lastName && formik.errors.lastName}
         />
 
         <FilledInput
@@ -118,91 +146,128 @@ const DriverRequestForm = () => {
         />
 
         <Dropdown
-          name="vehicle"
-          title="What kind of vehicle?"
+          name="ownVehicle"
+          title="Do you own a vehicle?"
           options={vehicleOptions}
-          value={formik.values.vehicle}
+          value={formik.values.ownVehicle}
           onChange={formik.handleChange}
           customStyle={
-            formik.touched.vehicle && formik.errors.vehicle
+            formik.touched.ownVehicle && formik.errors.ownVehicle
               ? "border-red-500"
               : ""
           }
+          error={formik.touched.ownVehicle && formik.errors.ownVehicle}
+        />
+        <Dropdown
+          name="vehicleType"
+          title="What kind of vehicle?"
+          options={vehicleOptions}
+          value={formik.values.vehicleType}
+          onChange={formik.handleChange}
+          customStyle={
+            formik.touched.vehicleType && formik.errors.vehicleType
+              ? "border-red-500"
+              : ""
+          }
+          error={formik.touched.vehicleType && formik.errors.vehicleType}
         />
 
         <Dropdown
-          name="license"
+          name="hasValidLicense"
           title="Do you have a valid license?"
           options={[
             { value: "yes", title: "Yes" },
             { value: "no", title: "No" },
           ]}
-          value={formik.values.license}
+          value={formik.values.hasValidLicense}
           onChange={formik.handleChange}
           customStyle={
-            formik.touched.license && formik.errors.license
+            formik.touched.hasValidLicense && formik.errors.hasValidLicense
               ? "border-red-500"
               : ""
+          }
+          error={
+            formik.touched.hasValidLicense && formik.errors.hasValidLicense
           }
         />
 
         <Dropdown
-          name="insurance"
+          name="hasValidVehicleInsurance"
           title="Valid SGI Vehicle Insurance?"
           options={[
             { value: "yes", title: "Yes" },
             { value: "no", title: "No" },
           ]}
-          value={formik.values.insurance}
+          value={formik.values.hasValidVehicleInsurance}
           onChange={formik.handleChange}
           customStyle={
-            formik.touched.insurance && formik.errors.insurance
+            formik.touched.hasValidVehicleInsurance &&
+            formik.errors.hasValidVehicleInsurance
               ? "border-red-500"
               : ""
+          }
+          error={
+            formik.touched.hasValidVehicleInsurance &&
+            formik.errors.hasValidVehicleInsurance
           }
         />
 
         <Dropdown
-          name="availability"
+          name="availabiltyDays"
           title="Availability"
           options={availabilityOptions}
-          value={formik.values.availability}
+          value={formik.values.availabiltyDays}
           onChange={formik.handleChange}
           customStyle={
-            formik.touched.availability && formik.errors.availability
+            formik.touched.availabiltyDays && formik.errors.availabiltyDays
               ? "border-red-500"
               : ""
+          }
+          error={
+            formik.touched.availabiltyDays && formik.errors.availabiltyDays
           }
         />
 
         <Dropdown
-          name="timeAvailable"
+          name="availabiltyTime"
           title="Time Available"
           options={timeOptions}
-          value={formik.values.timeAvailable}
+          value={formik.values.availabiltyTime}
           onChange={formik.handleChange}
           customStyle={
-            formik.touched.timeAvailable && formik.errors.timeAvailable
+            formik.touched.availabiltyTime && formik.errors.availabiltyTime
               ? "border-red-500"
               : ""
+          }
+          error={
+            formik.touched.availabiltyTime && formik.errors.availabiltyTime
           }
         />
 
         <Dropdown
-          name="deliveryZone"
+          name="preferredTimeZone"
           title="Preferred zone for delivery"
           options={deliveryZoneOptions}
-          value={formik.values.deliveryZone}
+          value={formik.values.preferredTimeZone}
           onChange={formik.handleChange}
           customStyle={
-            formik.touched.deliveryZone && formik.errors.deliveryZone
+            formik.touched.preferredTimeZone && formik.errors.preferredTimeZone
               ? "border-red-500"
               : ""
+          }
+          error={
+            formik.touched.preferredTimeZone && formik.errors.preferredTimeZone
           }
         />
 
         <div className="flex justify-center mt-6">
-          <PrimaryButton type="submit">SUBMIT YOUR REQUEST</PrimaryButton>
+          <PrimaryButton type="submit">
+            {loading ? (
+              <Loader dotClassess="bg-white" />
+            ) : (
+              "SUBMIT YOUR REQUEST"
+            )}
+          </PrimaryButton>
         </div>
       </form>
     </div>

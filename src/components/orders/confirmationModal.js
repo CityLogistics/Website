@@ -9,6 +9,7 @@ import {
 } from "@headlessui/react";
 import FilledInput from "../elements/filledInput";
 import PrimaryButton from "../elements/primaryButton";
+import { getPrice } from "@/utils";
 
 const ConfirmOrderModal = ({
   isOpen,
@@ -21,15 +22,27 @@ const ConfirmOrderModal = ({
   handlePickUpLocationChange,
   onConfirm,
 }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(deliveryOptions[0]);
   const handleSelection = (index) => {
     setSelectedOption(index);
   };
 
+  console.info({ isOpen });
+
   if (!isOpen) return null;
+  const { pickUpProvince, dropOffProvince, value } = isOpen;
+  console.info({ pickUpProvince, dropOffProvince, value });
+
+  const price = getPrice({
+    pickup: pickUpProvince?.toUpperCase(),
+    dropoff: dropOffProvince?.toUpperCase(),
+    vehicleType: selectedOption.value,
+    distance: value,
+  });
+  console.info({ price });
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
+    <Transition appear show={Boolean(isOpen)} as={Fragment}>
       <Dialog
         as="div"
         className="font-sans fixed inset-0 z-[99999999] flex items-center justify-center"
@@ -100,7 +113,7 @@ const ConfirmOrderModal = ({
                           ? "mx-auto"
                           : "mr-auto"
                       }`}
-                      onClick={() => handleSelection(index)}
+                      onClick={() => handleSelection(option)}
                     >
                       <img
                         src={option.image}
@@ -123,10 +136,11 @@ const ConfirmOrderModal = ({
                       name="pickUpLocation"
                       title="Pick Up Location"
                       placeholder="The pick-up address"
-                      value={pickUpLocation}
+                      value={pickUpLocation.description}
                       onChange={handlePickUpLocationChange}
                       onBlur={pickupError}
                       error={pickupError}
+                      disabled
                     />
                     {pickupError && (
                       <div className="text-rose-300 text-[12px] ml-1">
@@ -140,10 +154,11 @@ const ConfirmOrderModal = ({
                       name="dropOffLocation"
                       title="Drop Off Location"
                       placeholder="The drop-off address"
-                      value={dropOffLocation}
+                      value={dropOffLocation.description}
                       onChange={handleDropOffLocationChange}
                       onBlur={dropOffError}
                       error={dropOffError}
+                      disabled
                     />
                     {dropOffError && (
                       <div className="text-rose-300 text-[12px] ml-1">
@@ -157,12 +172,15 @@ const ConfirmOrderModal = ({
                   name="price"
                   title="Total to Pay:"
                   customStyle="h-[60px] text-xl text-black"
-                  value="$100"
+                  value={`$${price / 100}`}
                   disabled
                 />
                 {/* Confirm Button */}
                 <div className="flex justify-center mt-6">
-                  <PrimaryButton type="submit" handleClick={onConfirm}>
+                  <PrimaryButton
+                    type="submit"
+                    handleClick={() => onConfirm(selectedOption.value)}
+                  >
                     CONFIRM YOUR REQUEST
                   </PrimaryButton>
                 </div>
