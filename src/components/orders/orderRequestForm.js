@@ -2,80 +2,101 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import FilledInput from "../elements/filledInput";
 import PrimaryButton from "../elements/primaryButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmOrderModal from "./confirmationModal";
+import { instance } from "@/apis";
+import MapPicker from "../elements/mapPicker";
 
 const OrderRequestForm = () => {
-  const [pickUpLocation, setPickUpLocation] = useState("");
-  const [dropOffLocation, setDropOffLocation] = useState("");
-  const [pickupError, setPickUpError] = useState(null);
-  const [dropOffError, setDropOffError] = useState(null);
-  const [isModalOpen, setModalOpen] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
-    setModalOpen(true);
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setModalOpen(false);
-  };
-  console.log(pickupError, dropOffError);
-  const handlePickUpLocationChange = (e) => {
-    setPickUpLocation(e.target.value);
+    setIsModalOpen(false);
   };
 
-  const handleDropOffLocationChange = (e) => {
-    setDropOffLocation(e.target.value);
-  };
-  // Validation schema
   const validationSchema = yup.object({
-    senderName: yup.string().required("Sender's name is required"),
-    email: yup.string().email("Invalid email").required("Email is required"),
-    pickUpPhoneNumber: yup.string().required("Pickup phone number is required"),
-    pickUpDate: yup.date().required("Pickup date is required"),
-    pickupTime: yup
-      .string("Select pickup time")
-      .required("Pickup time is required"),
-    dropOffRecipientName: yup.string().required("Recipient's name is required"),
-    dropOffPhoneNumber: yup
-      .string()
-      .required("Drop-off phone number is required"),
+    email: yup
+      .string("Enter Email")
+      .email("Email is invalid")
+      .required("Email is required"),
+    senderName: yup
+      .string("Enter sender's name")
+      .required("Sender's name is required"),
+    recipientName: yup
+      .string("Enter recipient's name")
+      .required("Recipient's name is required"),
+    senderPhone: yup
+      .string("Enter sender's phone number")
+      .required("Sender's phone number is required"),
+    recipientPhone: yup
+      .string("Enter recipient's phone number")
+      .required("Recipient's phone number is required"),
+    pickup: yup.object({
+      address: yup
+        .string("Enter pick up address")
+        .required("Pick up address is required"),
+    }),
+    dropoff: yup.object({
+      address: yup
+        .string("Enter drop off address")
+        .required("Drop off address is required"),
+    }),
+    discription: yup
+      .string("Enter discription")
+      .required("Discription is required"),
   });
 
-  // Formik hook
   const formik = useFormik({
     initialValues: {
-      senderName: "",
       email: "",
-      pickUpPhoneNumber: "",
-      pickUpDate: "",
-      dropOffRecipientName: "",
-      dropOffPhoneNumber: "",
-      pickupTime: "",
-      itemDescription: "",
+      senderName: "",
+      recipientName: "",
+      senderPhone: "",
+      recipientPhone: "",
+      discription: "",
+      dropoff: {},
+      pickup: {},
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // Custom validation for pickUpLocation and dropOffLocation
-
-      // if (pickUpLocation === "") {
-      //   setPickUpError("Please choose a pick-up location");
-      // }
-      // if (dropOffLocation === "") {
-      //   setDropOffError("Please choose a drop-off location");
-      // }
-
-      // if (!pickupError && !dropOffError) {
-      //   const payload = {
-      //     ...values,
-      //     pickUpLocation,
-      //     dropOffLocation,
-      //   };
-      //   console.log(payload);
-      // }
       openModal();
     },
   });
+
+  const onConfirm = async () => {
+    closeModal();
+    const { senderPhone, recipientPhone, pickup, dropoff, ...values } =
+      formik.values;
+    try {
+      const payload = {
+        pickupDate: new Date().toISOString(),
+        pickupPhoneNumber: senderPhone,
+        dropOffPhoneNumber: recipientPhone,
+        type: "HEALTH_AND_MEDICINE",
+        vehicleType: "SALON",
+        ...values,
+        pickupAddress: pickup,
+        dropOffAddress: dropoff,
+      };
+      const res = await instance.post("/orders", payload);
+      console.info({ res });
+    } catch (error) {}
+  };
+
+  const handlePickUpLocationChange = (val, filed) => {
+    console.info({ val, filed });
+    formik.setFieldValue(filed, { ...val, address: val.description });
+  };
+
+  useEffect(() => {
+    const res = JSON.parse(localStorage.getItem("payload"));
+    formik.setValues(res);
+    console.info({ res });
+  }, []);
+  console.info(formik.values);
 
   return (
     <div>
@@ -107,33 +128,31 @@ const OrderRequestForm = () => {
           error={formik.touched.email && formik.errors.email}
         />
 
-        <div>
-          <FilledInput
-            type="text"
-            name="pickUpLocation"
-            title="Pick Up Location"
-            placeholder="The pick-up address"
-            value={pickUpLocation}
-            onChange={handlePickUpLocationChange}
-            onBlur={formik.handleBlur}
-            error={pickupError}
-          />
-          {pickupError && (
-            <div className="text-rose-300 text-[12px] ml-1">{pickupError}</div>
+        <MapPicker
+          inputField={() => (
+            <FilledInput
+              type="text"
+              name="pickup"
+              title="Pick Up Location"
+              placeholder="The pick-up address"
+              value={formik.values.pickup?.address}
+              // onChange={handlePickUpLocationChange}
+              onBlur={formik.handleBlur}
+              // error={pickupError}
+            />
           )}
-        </div>
-
+          value={formik.values.pickup?.address}
+          onChange={(e) => handlePickUpLocationChange(e, "pickup")}
+        />
         <FilledInput
           type="tel"
-          name="pickUpPhoneNumber"
+          name="senderPhone"
           title="Pickup Phone Number"
           placeholder="Your phone number"
-          value={formik.values.pickUpPhoneNumber}
+          value={formik.values.senderPhone}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.pickUpPhoneNumber && formik.errors.pickUpPhoneNumber
-          }
+          error={formik.touched.senderPhone && formik.errors.senderPhone}
         />
 
         <FilledInput
@@ -159,65 +178,55 @@ const OrderRequestForm = () => {
 
         <FilledInput
           type="text"
-          name="dropOffRecipientName"
+          name="recipientName"
           title="Drop-off Recipient's Name"
           placeholder="The recipient's name"
-          value={formik.values.dropOffRecipientName}
+          value={formik.values.recipientName}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.dropOffRecipientName &&
-            formik.errors.dropOffRecipientName
-          }
+          error={formik.touched.recipientName && formik.errors.recipientName}
         />
 
-        <div>
-          <FilledInput
-            type="text"
-            name="dropOffLocation"
-            title="Drop Off Location"
-            placeholder="The drop-off address"
-            value={dropOffLocation}
-            onChange={handleDropOffLocationChange}
-            onBlur={formik.handleBlur}
-            error={dropOffError}
-          />
-          {dropOffError && (
-            <div className="text-rose-300 text-[12px] ml-1">{dropOffError}</div>
+        <MapPicker
+          inputField={() => (
+            <FilledInput
+              type="text"
+              name="dropOffLocation"
+              title="Drop Off Location"
+              placeholder="The drop-off address"
+              value={formik.values.dropoff?.address}
+              // onChange={handleDropOffLocationChange}
+              onBlur={formik.handleBlur}
+              // error={dropOffError}
+            />
           )}
-        </div>
+          value={formik.values.dropoff?.address}
+          onChange={(e) => handlePickUpLocationChange(e, "dropoff")}
+        />
 
         <FilledInput
           type="tel"
-          name="dropOffPhoneNumber"
+          name="recipientPhone"
           title="Drop-off Phone Number"
           placeholder="Drop-off phone number"
-          value={formik.values.dropOffPhoneNumber}
+          value={formik.values.recipientPhone}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.dropOffPhoneNumber &&
-            formik.errors.dropOffPhoneNumber
-          }
+          error={formik.touched.recipientPhone && formik.errors.recipientPhone}
         />
         <FilledInput
           type="text"
-          name="itemDescription"
+          name="discription"
           title="Item Description"
           placeholder="Describe the item..."
-          value={formik.values.itemDescription}
+          value={formik.values.discription}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.itemDescription && formik.errors.itemDescription
-          }
+          error={formik.touched.discription && formik.errors.discription}
         />
 
         <div className="flex justify-center mt-6">
-          <PrimaryButton
-            type="submit"
-            // disabled={!formik.isValid}
-          >
+          <PrimaryButton type="submit" disabled={!formik.isValid}>
             SUBMIT YOUR REQUEST
           </PrimaryButton>
         </div>
@@ -225,12 +234,13 @@ const OrderRequestForm = () => {
       <ConfirmOrderModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        pickUpLocation={pickUpLocation}
-        pickupError={pickupError}
-        dropOffError={dropOffError}
-        dropOffLocation={dropOffLocation}
-        handleDropOffLocationChange={handleDropOffLocationChange}
-        handlePickUpLocationChange={handlePickUpLocationChange}
+        pickUpLocation={formik.values.pickup?.address}
+        // pickupError={pickupError}
+        // dropOffError={dropOffError}
+        dropOffLocation={formik.values.dropoff?.address}
+        // handleDropOffLocationChange={handleDropOffLocationChange}
+        // handlePickUpLocationChange={handlePickUpLocationChange}
+        onConfirm={onConfirm}
       />
     </div>
   );

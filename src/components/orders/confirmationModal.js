@@ -19,6 +19,7 @@ const ConfirmOrderModal = ({
   dropOffLocation,
   handleDropOffLocationChange,
   handlePickUpLocationChange,
+  onConfirm,
 }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const handleSelection = (index) => {
@@ -161,7 +162,7 @@ const ConfirmOrderModal = ({
                 />
                 {/* Confirm Button */}
                 <div className="flex justify-center mt-6">
-                  <PrimaryButton type="submit">
+                  <PrimaryButton type="submit" handleClick={onConfirm}>
                     CONFIRM YOUR REQUEST
                   </PrimaryButton>
                 </div>

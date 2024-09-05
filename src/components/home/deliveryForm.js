@@ -1,16 +1,130 @@
 import Image from "next/image";
 import PrimaryButton from "../elements/primaryButton";
 
+import Script from "next/script";
+import MapPicker from "../elements/mapPicker";
+import * as yup from "yup";
+import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+
 /* eslint-disable react/no-unescaped-entities */
-const DeliveryForm = ({
-  pickUpLocation,
-  dropOffLocation,
-  handlePickUpLocationChange,
-  handleDropOffLocationChange,
-  formik,
-}) => {
+const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
+  async function codeAddress(place) {
+    const { place_id, description } = place;
+
+    console.info({ place_id, description });
+
+    const geocoder = new google.maps.Geocoder();
+
+    return new Promise((resolve, reject) => {
+      geocoder.geocode({ placeId: place_id }, function (results, status) {
+        if (status == "OK") {
+          if (results[0]) {
+            const province = results[0].address_components.find(
+              (v) => v.types[0] == "administrative_area_level_1"
+            )?.long_name;
+
+            console.info({
+              lat: results[0].geometry?.location?.lat(),
+              lng: results[0].geometry?.location?.lng(),
+              province,
+              country: "string",
+              address: description,
+              placeId: place_id,
+            });
+
+            resolve({
+              province: province.toUpperCase(),
+              country: "string",
+              address: description,
+              placeId: place_id,
+              lat: results[0].geometry?.location?.lat(),
+              lng: results[0].geometry?.location?.lng(),
+            });
+          }
+        } else {
+          alert(
+            "Geocode was not successful for the following reason: " + status
+          );
+          reject("not found");
+        }
+      });
+    });
+  }
+
+  const ready = async () => {
+    console.info("done");
+  };
+
+  const handlePickUpLocationChange = (val, filed) => {
+    formik.setFieldValue(filed, val);
+  };
+
+  const validationSchema = yup.object({
+    senderName: yup
+      .string("Enter sender's name")
+      .required("Sender's name is required"),
+    recipientName: yup
+      .string("Enter recipient's name")
+      .required("Recipient's name is required"),
+    senderPhone: yup
+      .string("Enter sender's phone number")
+      .required("Sender's phone number is required"),
+    recipientPhone: yup
+      .string("Enter recipient's phone number")
+      .required("Recipient's phone number is required"),
+    pickup: yup.object({
+      description: yup
+        .string("Enter pick up address")
+        .required("Pick up address is required"),
+    }),
+    dropoff: yup.object({
+      description: yup
+        .string("Enter drop off address")
+        .required("Drop off address is required"),
+    }),
+  });
+
+  const router = useRouter();
+
+  const formik = useFormik({
+    initialValues: {
+      senderName: "",
+      recipientName: "",
+      senderPhone: "",
+      recipientPhone: "",
+      dropoff: {},
+      pickup: {},
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      console.info({ values });
+      const { pickup, dropoff, ...others } = values;
+
+      const [pickupLoc, dropOffLoc] = await Promise.all([
+        codeAddress(pickup),
+        codeAddress(dropoff),
+      ]);
+
+      const payload = {
+        ...others,
+
+        pickup: pickupLoc,
+        dropoff: dropOffLoc,
+      };
+      console.log(payload);
+      localStorage.setItem("payload", JSON.stringify(payload));
+      router.push("/order-request");
+      // Add your form submission logic here
+    },
+  });
+
   return (
     <div className="font-serif mt-[100px]">
+      <Script
+        onReady={ready}
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_MAP_KEY}&libraries=places`}
+      />
       <div className="w-full bg-[#F9F9F9] rounded-[20px] shadow-lg px-6 py-[30px]">
         <form
           onSubmit={formik.handleSubmit}
@@ -25,25 +139,15 @@ const DeliveryForm = ({
               >
                 Pick Up Location
               </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                  <Image
-                    src="/images/location-icon.svg"
-                    alt="Location icon"
-                    width={20}
-                    height={20}
-                  />
-                </span>
-                <input
-                  type="text"
-                  id="pickUpLocation"
-                  name="pickUpLocation"
-                  placeholder="Location here..."
-                  value={pickUpLocation}
-                  onChange={handlePickUpLocationChange}
-                  className="w-full pl-10 pr-4 py-2 border rounded-[10px] border-[#BDBDBD] focus:outline-none focus:ring-primary"
-                />
-              </div>
+              <MapPicker
+                value={formik.values.pickup?.description}
+                onChange={(e) => handlePickUpLocationChange(e, "pickup")}
+              />
+              {formik.touched.pickup && formik.errors.pickup ? (
+                <div className="text-rose-300 text-[12px] ml-1">
+                  {formik.errors.pickup.description}
+                </div>
+              ) : null}
             </div>
             {/* Drop Off Location */}
             <div>
@@ -53,25 +157,15 @@ const DeliveryForm = ({
               >
                 Drop Off Location
               </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                  <Image
-                    src="/images/location-icon.svg"
-                    alt="Location icon"
-                    width={20}
-                    height={20}
-                  />
-                </span>
-                <input
-                  type="text"
-                  id="dropOffLocation"
-                  name="dropOffLocation"
-                  placeholder="Location here..."
-                  value={dropOffLocation}
-                  onChange={handleDropOffLocationChange}
-                  className="w-full pl-10 pr-4 py-2 border rounded-[10px] border-[#BDBDBD] focus:outline-none focus:ring-primary"
-                />
-              </div>
+              <MapPicker
+                value={formik.values.dropoff?.description}
+                onChange={(e) => handlePickUpLocationChange(e, "dropoff")}
+              />
+              {formik.touched.dropoff && formik.errors.dropoff ? (
+                <div className="text-rose-300 text-[12px] ml-1">
+                  {formik.errors.dropoff.description}
+                </div>
+              ) : null}
             </div>
 
             {/* Sender's Name */}
