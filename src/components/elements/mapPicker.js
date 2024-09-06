@@ -52,7 +52,10 @@ export default function MapPicker({ onChange, inputField, ...inputProps }) {
   return (
     <div ref={ref} className="relative">
       {!inputField && (
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+        <span
+          className="absolute inset-y-0 left-0 flex items-center pl-3 z-50"
+          onClick={() => setOpen(true)}
+        >
           <Image
             src="/images/location-icon.svg"
             alt="Location icon"
@@ -61,27 +64,30 @@ export default function MapPicker({ onChange, inputField, ...inputProps }) {
           />
         </span>
       )}
-      <div
-        className="absolute  left-0 right-0 bottom-0 top-0"
-        onClick={() => setOpen(true)}
-      ></div>
-      {inputField ? (
-        inputField()
-      ) : (
-        <input
-          type="text"
-          id="pickUpLocation"
-          name="pickUpLocation"
-          placeholder="Location here..."
-          {...inputProps}
-          className="w-full pl-10 pr-4 py-2 border rounded-[10px] border-[#BDBDBD] focus:outline-none focus:ring-primary disabled:bg-white"
-          disabled
+      <div className="relative">
+        <div
+          className="absolute  left-0 right-0 bottom-0 top-0 h-full w-full z-40"
           onClick={() => setOpen(true)}
         />
-      )}
+
+        {inputField ? (
+          inputField()
+        ) : (
+          <input
+            type="text"
+            id="pickUpLocation"
+            name="pickUpLocation"
+            placeholder="Location here..."
+            {...inputProps}
+            className="w-full pl-10 pr-4 py-2 border rounded-[10px] border-[#BDBDBD] focus:outline-none focus:ring-primary disabled:bg-white disabled:opacity-100"
+            disabled
+            onClick={() => setOpen(true)}
+          />
+        )}
+      </div>
 
       {open && (
-        <div className="absolute top-10 h-56  w-full bg-white shadow-lg flex flex-col pb-2">
+        <div className="absolute top-10 h-56  w-full bg-white shadow-lg flex flex-col pb-2 z-[100]">
           <input
             type="text"
             id="pickUpLocation"

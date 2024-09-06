@@ -21,7 +21,7 @@ function FilledInput({
       <input
         className={`${
           error ? "border-rose-300" : "border-[#D0D5DDC2] focus:border-primary"
-        } border-solid border-[0.4px] py-2 px-4 w-full h-[40px] text-[#616161] focus:outline-none focus:border-primary focus:text-[#444444] rounded-[6px] shadow-sm bg-[#F2F2F2]
+        } border-solid border-[0.4px] py-2 px-4 w-full min-w-full text-left h-[40px] text-[#616161] focus:outline-none focus:border-primary focus:text-[#444444] rounded-[6px] shadow-sm bg-[#F2F2F2]
             focus:border disabled:opacity-50 ${customStyle}`}
         type={type}
         disabled={disabled}
@@ -32,6 +32,7 @@ function FilledInput({
         onBlur={onBlur}
         placeholder={placeholder}
       />
+
       {error && <div className="text-rose-300 text-[10px] mt-1">{error}</div>}
     </div>
   );

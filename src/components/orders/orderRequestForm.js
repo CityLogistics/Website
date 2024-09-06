@@ -11,6 +11,7 @@ import {
   codeAddress,
   formatPhoneNumber,
   getDistace,
+  getPrice,
   parseError,
 } from "@/utils";
 import { toast } from "sonner";
@@ -109,16 +110,24 @@ const OrderRequestForm = () => {
       };
       const { distance, status } = await getDistace(payload);
       setLoading(false);
-
+      console.info({ distance, status });
       if (status == "OK") {
-        console.info({ distance, pickupLoc, pickupLoc });
-        openModal({
-          ...distance,
-          pickUpProvince: pickupLoc.province,
-          dropOffProvince: dropOffLoc.province,
-          pickupLoc,
-          dropOffLoc,
+        const price = getPrice({
+          pickup: pickupLoc.province?.toUpperCase(),
+          dropoff: dropOffLoc.province?.toUpperCase(),
+          vehicleType: "SALON",
+          distance: distance.value,
         });
+        console.info({ distance, pickupLoc, pickupLoc, price });
+        if (isNaN(price)) toast.error("Invalid pickup or dropoff address ");
+        else
+          openModal({
+            ...distance,
+            pickUpProvince: pickupLoc.province,
+            dropOffProvince: dropOffLoc.province,
+            pickupLoc,
+            dropOffLoc,
+          });
       } else toast.error("Invalid pickup or dropoff address ");
     },
   });
@@ -171,7 +180,7 @@ const OrderRequestForm = () => {
   // console.info(formik.values);
 
   return (
-    <div>
+    <div className="">
       <form onSubmit={formik.handleSubmit} className="font-serif w-full">
         <h2 className="text-lg font-bold mb-4">Order Request</h2>
         <p className="text-sm mb-6 text-gray-500">
