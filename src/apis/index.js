@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-const baseUrl = "http://localhost:3000/";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+// const baseUrl = "http://localhost:3000/";
 
 console.info({ baseUrl });
 
