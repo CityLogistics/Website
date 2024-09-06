@@ -1,4 +1,12 @@
-function Dropdown({ options, customStyle, value, onChange, name, title }) {
+function Dropdown({
+  options,
+  customStyle,
+  value,
+  onChange,
+  name,
+  title,
+  error,
+}) {
   return (
     <div className="relative mb-4">
       <span className="text-[#344054] text-[10px] lg:text-[12px] mb-1 block">
@@ -35,6 +43,7 @@ function Dropdown({ options, customStyle, value, onChange, name, title }) {
           />
         </svg>
       </div>
+      {error && <div className="text-rose-300 text-[10px] mt-1">{error}</div>}
     </div>
   );
 }

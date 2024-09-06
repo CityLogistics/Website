@@ -1,5 +1,6 @@
 import axios from "axios";
 import { instance } from "./apis";
+import { useState } from "react";
 
 export const regionalPrices = {
   ALBERTA: 1600,
@@ -122,3 +123,58 @@ export function getPrice({ pickup, dropoff, distance, vehicleType }) {
 
   return totalPrice;
 }
+
+export function formatPhoneNumber(phone) {
+  let l = phone.length;
+  return "+1" + (l == 11 ? phone.substring(1, l) : phone);
+}
+
+export const openWidget = (setFile) => {
+  var myWidget =
+    window.cloudinary &&
+    window.cloudinary.createUploadWidget(
+      {
+        cloudName: "workstedi",
+        uploadPreset: "lm1ip4fw",
+        api_key: "455779734655193",
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          setFile(result.info.secure_url);
+        }
+      }
+    );
+  myWidget?.open();
+};
+
+export const useCloudinary = (setFile) => {
+  const [loading, setLoading] = useState(false);
+
+  const launchWidget = () => {
+    var myWidget =
+      window.cloudinary &&
+      window.cloudinary.createUploadWidget(
+        {
+          cloudName: "workstedi",
+          uploadPreset: "lm1ip4fw",
+          api_key: "455779734655193",
+        },
+        (error, result) => {
+          setLoading(false);
+
+          if (!error && result && result.event === "success") {
+            setFile(result.info.secure_url);
+          }
+        }
+      );
+    if (myWidget) {
+      setLoading(true);
+      myWidget?.open();
+    }
+  };
+
+  return {
+    loading,
+    launchWidget,
+  };
+};

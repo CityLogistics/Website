@@ -6,16 +6,31 @@ import Dropdown from "../elements/dropdown";
 import PrimaryButton from "../elements/primaryButton";
 import Loader from "../Loader";
 import { useState } from "react";
+import { toast } from "sonner";
+import { parseError, formatPhoneNumber } from "@/utils";
+import { instance } from "@/apis";
+import { useRouter } from "next/navigation";
+import PhoneInput from "../elements/phoneInput";
+import { WidgetLoader } from "react-cloudinary-upload-widget";
+import ImageInput from "../elements/ImageInput";
 
 const DriverRequestForm = () => {
   // Validation schema
   const validationSchema = yup.object({
     firstName: yup.string().required("Driver's first name is required"),
     lastName: yup.string().required("Driver's last name is required"),
-    phoneNumber: yup.string().required("Phone number is required"),
+    phoneNumber: yup
+      .string()
+      .required("Phone number is required")
+      .test("len", "Phone number is invalid", (val) => val.length == 10),
     email: yup.string().email("Invalid email").required("Email is required"),
     ownVehicle: yup.string().required("Vehicle ownership status is required"),
-    vehicleType: yup.string().required("Vehicle type is required"),
+    vehicleType: yup.string().when("ownVehicle", {
+      is: (value) => value === "true",
+      then: (schema) => schema.required("Vehicle type is required"),
+      otherwise: (schema) => schema,
+    }),
+
     hasValidLicense: yup.string().required("Valid license is required"),
     hasValidVehicleInsurance: yup
       .string()
@@ -23,10 +38,12 @@ const DriverRequestForm = () => {
     availabiltyDays: yup.string().required("Availability is required"),
     availabiltyTime: yup.string().required("Time available is required"),
     preferredTimeZone: yup.string().required("Delivery zone is required"),
+    image: yup.string().required("Image is required"),
   });
 
   const [loading, setLoading] = useState(false);
-
+  var isTrueSet = (v) => v === "true";
+  const router = useRouter();
   // Formik hook
   const formik = useFormik({
     initialValues: {
@@ -35,10 +52,10 @@ const DriverRequestForm = () => {
       email: "",
       phoneNumber: "",
       image: "",
-      ownVehicle: true,
+      ownVehicle: "true",
       vehicleType: "",
-      hasValidLicense: true,
-      hasValidVehicleInsurance: true,
+      hasValidLicense: "true",
+      hasValidVehicleInsurance: "true",
       availabiltyDays: "",
       availabiltyTime: "",
       preferredTimeZone: "",
@@ -46,13 +63,42 @@ const DriverRequestForm = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
+      const {
+        ownVehicle,
+        hasValidLicense,
+        hasValidVehicleInsurance,
+        vehicleType,
+        availabiltyDays,
+        availabiltyTime,
+        phoneNumber,
+        ...others
+      } = values;
+
+      const payLoad = {
+        ...others,
+        ownVehicle: isTrueSet(ownVehicle),
+        hasValidLicense: isTrueSet(hasValidLicense),
+        hasValidVehicleInsurance: isTrueSet(hasValidVehicleInsurance),
+        availabiltyDays: [availabiltyDays],
+        availabiltyTime: [availabiltyTime],
+        phoneNumber: formatPhoneNumber(phoneNumber),
+      };
+      console.info({ values, payLoad });
+
+      if (isTrueSet(ownVehicle)) payLoad["vehicleType"] = vehicleType;
 
       try {
-        const { status, error, data } = await instance.post("/drivers", values);
+        const { status, error, data } = await instance.post(
+          "/drivers",
+          payLoad
+        );
         setLoading(false);
         if (status == 201 && data) {
           console.info({ data });
-          router.push(data.paymentUrl);
+
+          formik.resetForm();
+          toast.success("Driver request saved");
+          setTimeout(() => router.push("/"), 2000);
         } else toast.error(parseError(error));
       } catch (error) {
         setLoading(false);
@@ -62,27 +108,35 @@ const DriverRequestForm = () => {
     },
   });
 
+  const boolOptions = [
+    { value: "true", title: "Yes" },
+    { value: "false", title: "No" },
+  ];
+
   const vehicleOptions = [
     { value: "", title: "Select vehicle" },
-    { value: "sedan", title: "Sedan/Salon" },
-    { value: "suv", title: "SUV" },
-    { value: "truck", title: "Truck" },
+    { value: "SALON", title: "Sedan/Salon" },
+    { value: "FIVE_SEATER_SUV", title: "SUV" },
+    { value: "TRUCK", title: "Truck" },
   ];
 
   const availabilityOptions = [
     { value: "", title: "Select availability" },
-    { value: "monday", title: "Mondays" },
-    { value: "tuesday", title: "Tuesdays" },
-    { value: "wednesday", title: "Wednesdays" },
-    { value: "thursday", title: "Thursdays" },
-    { value: "friday", title: "Fridays" },
+    { value: "MONDAY", title: "Mondays" },
+    { value: "TUESDAY", title: "Tuesdays" },
+    { value: "WEDNESDAY", title: "Wednesdays" },
+    { value: "THURSDAY", title: "Thursdays" },
+    { value: "FRIDAY", title: "Fridays" },
+    { value: "SATURDAY", title: "Saturday" },
+    { value: "SUNDAY", title: "Sunday" },
   ];
 
   const timeOptions = [
     { value: "", title: "Select time available" },
-    { value: "morning", title: "Mornings (8 am to 12 noon)" },
-    { value: "afternoon", title: "Afternoons (12 pm to 5 pm)" },
-    { value: "evening", title: "Evenings (5 pm to 9 pm)" },
+    { value: "MORNING", title: "Mornings (8 am to 12 noon)" },
+    { value: "AFTERNOON", title: "Afternoons (12 pm to 5 pm)" },
+    { value: "EVENING", title: "Evenings (5 pm to 9 pm)" },
+    { value: "NIGHT", title: "Night (9 pm to 8 am)" },
   ];
 
   const deliveryZoneOptions = [
@@ -95,11 +149,20 @@ const DriverRequestForm = () => {
 
   return (
     <div>
+      <WidgetLoader />
       <form onSubmit={formik.handleSubmit} className="font-serif w-full">
         <h2 className="text-lg font-bold mb-4">Driver's Pre-Qualification</h2>
         <p className="text-sm mb-6 text-gray-500">
           Please fill in the details below
         </p>
+
+        <ImageInput
+          title="Driver's Picture"
+          placeholder="Your picture"
+          onChange={(file) => formik.setFieldValue("image", file)}
+          value={formik.values.image}
+          error={formik.touched.image && formik.errors.image}
+        />
 
         <FilledInput
           type="text"
@@ -123,7 +186,7 @@ const DriverRequestForm = () => {
           error={formik.touched.lastName && formik.errors.lastName}
         />
 
-        <FilledInput
+        <PhoneInput
           type="tel"
           name="phoneNumber"
           title="Driver's Phone Number"
@@ -148,7 +211,7 @@ const DriverRequestForm = () => {
         <Dropdown
           name="ownVehicle"
           title="Do you own a vehicle?"
-          options={vehicleOptions}
+          options={boolOptions}
           value={formik.values.ownVehicle}
           onChange={formik.handleChange}
           customStyle={
@@ -158,27 +221,26 @@ const DriverRequestForm = () => {
           }
           error={formik.touched.ownVehicle && formik.errors.ownVehicle}
         />
-        <Dropdown
-          name="vehicleType"
-          title="What kind of vehicle?"
-          options={vehicleOptions}
-          value={formik.values.vehicleType}
-          onChange={formik.handleChange}
-          customStyle={
-            formik.touched.vehicleType && formik.errors.vehicleType
-              ? "border-red-500"
-              : ""
-          }
-          error={formik.touched.vehicleType && formik.errors.vehicleType}
-        />
+        {formik.values.ownVehicle == "true" && (
+          <Dropdown
+            name="vehicleType"
+            title="What kind of vehicle?"
+            options={vehicleOptions}
+            value={formik.values.vehicleType}
+            onChange={formik.handleChange}
+            customStyle={
+              formik.touched.vehicleType && formik.errors.vehicleType
+                ? "border-red-500"
+                : ""
+            }
+            error={formik.touched.vehicleType && formik.errors.vehicleType}
+          />
+        )}
 
         <Dropdown
           name="hasValidLicense"
           title="Do you have a valid license?"
-          options={[
-            { value: "yes", title: "Yes" },
-            { value: "no", title: "No" },
-          ]}
+          options={boolOptions}
           value={formik.values.hasValidLicense}
           onChange={formik.handleChange}
           customStyle={
@@ -194,10 +256,7 @@ const DriverRequestForm = () => {
         <Dropdown
           name="hasValidVehicleInsurance"
           title="Valid SGI Vehicle Insurance?"
-          options={[
-            { value: "yes", title: "Yes" },
-            { value: "no", title: "No" },
-          ]}
+          options={boolOptions}
           value={formik.values.hasValidVehicleInsurance}
           onChange={formik.handleChange}
           customStyle={
@@ -261,7 +320,7 @@ const DriverRequestForm = () => {
         />
 
         <div className="flex justify-center mt-6">
-          <PrimaryButton type="submit">
+          <PrimaryButton type="submit" customStyle="w-full">
             {loading ? (
               <Loader dotClassess="bg-white" />
             ) : (

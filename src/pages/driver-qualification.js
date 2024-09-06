@@ -1,10 +1,13 @@
 import DriverHero from "@/components/driverQualification/hero";
 import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
+import { Toaster } from "sonner";
 
 const DriverQualification = () => {
   return (
     <div>
+      <Toaster richColors position="top-center" />
+
       <div
         className="relative w-full bg-[url('/images/hero_bg.svg')] md:h-[800px]"
         style={{

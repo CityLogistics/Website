@@ -7,9 +7,15 @@ import ConfirmOrderModal from "./confirmationModal";
 import { instance } from "@/apis";
 import MapPicker from "../elements/mapPicker";
 import Loader from "../Loader";
-import { codeAddress, getDistace, parseError } from "@/utils";
+import {
+  codeAddress,
+  formatPhoneNumber,
+  getDistace,
+  parseError,
+} from "@/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import PhoneInput from "../elements/phoneInput";
 
 const OrderRequestForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,10 +39,20 @@ const OrderRequestForm = () => {
       .required("Recipient's name is required"),
     senderPhone: yup
       .string("Enter sender's phone number")
-      .required("Sender's phone number is required"),
+      .required("Sender's phone number is required")
+      .test(
+        "len",
+        "Sender's phone number is invalid",
+        (val) => val.length == 10
+      ),
     recipientPhone: yup
       .string("Enter recipient's phone number")
-      .required("Recipient's phone number is required"),
+      .required("Recipient's phone number is required")
+      .test(
+        "len",
+        "Recipient's phone number is invalid",
+        (val) => val.length == 10
+      ),
     pickup: yup.object({
       description: yup
         .string("Enter pick up address")
@@ -70,7 +86,7 @@ const OrderRequestForm = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
-      const { pickup, dropoff } = values;
+      const { pickup, dropoff, senderPhone, recipientPhone } = values;
       console.info({ pickup, dropoff });
       const [pickupLoc, dropOffLoc] = await Promise.all([
         codeAddress(pickup),
@@ -118,24 +134,17 @@ const OrderRequestForm = () => {
     const { senderPhone, recipientPhone, pickup, dropoff, ...values } =
       formik.values;
 
-    // const [pickupLoc, dropOffLoc] = await Promise.all([
-    //   codeAddress(pickup),
-    //   codeAddress(dropoff),
-    // ]);
-
     try {
       const payload = {
         pickupDate: new Date().toISOString(),
-        pickupPhoneNumber: senderPhone,
-        dropOffPhoneNumber: recipientPhone,
+        pickupPhoneNumber: formatPhoneNumber(senderPhone),
+        dropOffPhoneNumber: formatPhoneNumber(recipientPhone),
         type: "HEALTH_AND_MEDICINE",
-        // vehicleType: "SALON",
         vehicleType,
         ...values,
         pickupAddress: pickupLoc,
         dropOffAddress: dropOffLoc,
       };
-      // console.log(payload);
 
       const { status, error, data } = await instance.post("/orders", payload);
       setLoading(false);
@@ -158,8 +167,6 @@ const OrderRequestForm = () => {
   useEffect(() => {
     const res = JSON.parse(localStorage.getItem("payload"));
     formik.setValues(res);
-    // formik.se(res);
-    // console.info({ res });
   }, []);
   // console.info(formik.values);
 
@@ -209,7 +216,7 @@ const OrderRequestForm = () => {
           value={formik.values.pickup?.description}
           onChange={(e) => handlePickUpLocationChange(e, "pickup")}
         />
-        <FilledInput
+        <PhoneInput
           type="tel"
           name="senderPhone"
           title="Pickup Phone Number"
@@ -269,7 +276,7 @@ const OrderRequestForm = () => {
           onChange={(e) => handlePickUpLocationChange(e, "dropoff")}
         />
 
-        <FilledInput
+        <PhoneInput
           type="tel"
           name="recipientPhone"
           title="Drop-off Phone Number"
@@ -293,7 +300,7 @@ const OrderRequestForm = () => {
         <div className="flex justify-center mt-6">
           <PrimaryButton
             type="submit"
-            disabled={!formik.isValid}
+            // disabled={!formik.isValid}
             customStyle="w-full"
           >
             {loading ? (
@@ -308,11 +315,7 @@ const OrderRequestForm = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
         pickUpLocation={formik.values.pickup}
-        // pickupError={pickupError}
-        // dropOffError={dropOffError}
         dropOffLocation={formik.values.dropoff}
-        // handleDropOffLocationChange={handleDropOffLocationChange}
-        // handlePickUpLocationChange={handlePickUpLocationChange}
         onConfirm={(vehicleType) => onConfirm(vehicleType)}
       />
     </div>
