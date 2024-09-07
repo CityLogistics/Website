@@ -25,7 +25,7 @@ function ImageInput({
 
       <div className="relative">
         <div
-          className="absolute  left-0 right-0 bottom-0 top-0"
+          className="absolute  left-0 right-0 bottom-0 top-0 z-50"
           onClick={launchWidget}
         >
           {widgetLoading && (
@@ -40,7 +40,7 @@ function ImageInput({
             error
               ? "border-rose-300"
               : "border-[#D0D5DDC2] focus:border-primary"
-          } border-solid border-[0.4px] py-2 px-4 w-full h-[40px] text-[#616161] disabled:bg-[#F2F2F2] focus:outline-none focus:border-primary focus:text-[#444444] rounded-[6px] shadow-sm bg-[#F2F2F2]
+          } border-solid border-[0.4px] py-2 px-4 w-full h-[40px] text-[#616161] disabled:text-[#616161] disabled:opacity-100 disabled:bg-[#F2F2F2] focus:outline-none focus:border-primary focus:text-[#444444] rounded-[6px] shadow-sm bg-[#F2F2F2]
             focus:border  ${customStyle}`}
           type={type}
           disabled
