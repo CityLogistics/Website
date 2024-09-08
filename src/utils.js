@@ -34,6 +34,7 @@ export const parseError = (error) => {
 };
 
 export async function codeAddress(place) {
+  const google = window.google;
   const { place_id, description } = place;
 
   if (!google) return;
@@ -66,6 +67,8 @@ export async function codeAddress(place) {
 }
 
 export async function getDistace(params) {
+  const google = window.google;
+
   if (!google) return;
   try {
     var distanceService = new google.maps.DistanceMatrixService();
