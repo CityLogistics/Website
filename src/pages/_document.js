@@ -4,7 +4,6 @@ import Script from "next/script";
 export default function Document() {
   return (
     <Html lang="en">
-      <Script src="https://maps.googleapis.com/maps/api/js?sensor=false" />
       <Head />
       <body>
         <Main />
