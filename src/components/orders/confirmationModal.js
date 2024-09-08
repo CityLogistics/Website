@@ -99,7 +99,7 @@ const ConfirmOrderModal = ({
                     <div
                       key={index}
                       className={`relative w-[220px] h-[120px] mt-[40px] cursor-pointer rounded-[20px] ${
-                        selectedOption === index
+                        selectedOption.value === option.value
                           ? "bg-primary"
                           : "bg-[#EFEFEF] hover:bg-primary"
                       } p-2 ${
