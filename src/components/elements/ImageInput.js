@@ -15,7 +15,6 @@ function ImageInput({
   onBlur,
 }) {
   const { loading: widgetLoading, launchWidget } = useCloudinary(onChange);
-  console.info({ widgetLoading });
 
   return (
     <div className="font-serif w-full mb-4">

@@ -1,5 +1,3 @@
-import axios from "axios";
-import { instance } from "./apis";
 import { useState } from "react";
 
 export const regionalPrices = {
@@ -38,7 +36,7 @@ export const parseError = (error) => {
 export async function codeAddress(place) {
   const { place_id, description } = place;
 
-  console.info({ place_id, description });
+  if (!google) return;
 
   const geocoder = new google.maps.Geocoder();
 
@@ -49,15 +47,6 @@ export async function codeAddress(place) {
           const province = results[0].address_components.find(
             (v) => v.types[0] == "administrative_area_level_1"
           )?.long_name;
-
-          console.info({
-            lat: results[0].geometry?.location?.lat(),
-            lng: results[0].geometry?.location?.lng(),
-            province,
-            country: "string",
-            address: description,
-            placeId: place_id,
-          });
 
           resolve({
             province: province.toUpperCase(),
@@ -77,6 +66,7 @@ export async function codeAddress(place) {
 }
 
 export async function getDistace(params) {
+  if (!google) return;
   try {
     var distanceService = new google.maps.DistanceMatrixService();
     return new Promise((resolve, reject) => {
@@ -89,8 +79,6 @@ export async function getDistace(params) {
         },
         function (results, status) {
           if (status == "OK") {
-            console.info({ results });
-
             if (results?.rows?.[0]) {
               resolve({
                 distance: results?.rows?.[0]?.elements?.[0]?.distance,
@@ -108,13 +96,10 @@ export async function getDistace(params) {
         }
       );
     });
-  } catch (error) {
-    console.info({ error });
-  }
+  } catch (error) {}
 }
 
 export function getPrice({ pickup, dropoff, distance, vehicleType }) {
-  console.info({ pickup, dropoff, distance, vehicleType });
   const basePrice = Math.max(regionalPrices[pickup], regionalPrices[dropoff]);
   const vehiclePrice = vehiclePrices[vehicleType];
 

@@ -9,9 +9,7 @@ import { useRouter } from "next/navigation";
 
 /* eslint-disable react/no-unescaped-entities */
 const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
-  const ready = async () => {
-    console.info("done");
-  };
+  const ready = async () => {};
 
   const handlePickUpLocationChange = (val, filed) => {
     formik.setFieldValue(filed, val);
@@ -55,21 +53,6 @@ const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.info({ values });
-      // const { pickup, dropoff, ...others } = values;
-
-      // const [pickupLoc, dropOffLoc] = await Promise.all([
-      //   codeAddress(pickup),
-      //   codeAddress(dropoff),
-      // ]);
-
-      // const payload = {
-      //   ...others,
-
-      //   pickup: pickupLoc,
-      //   dropoff: dropOffLoc,
-      // };
-      // console.log(payload);
       localStorage.setItem("payload", JSON.stringify(values));
       router.push("/order-request");
       // Add your form submission logic here

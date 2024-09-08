@@ -27,11 +27,8 @@ const ConfirmOrderModal = ({
     setSelectedOption(index);
   };
 
-  console.info({ isOpen });
-
   if (!isOpen) return null;
   const { pickUpProvince, dropOffProvince, value } = isOpen;
-  console.info({ pickUpProvince, dropOffProvince, value });
 
   const price = getPrice({
     pickup: pickUpProvince?.toUpperCase(),
@@ -39,7 +36,6 @@ const ConfirmOrderModal = ({
     vehicleType: selectedOption.value,
     distance: value,
   });
-  console.info({ price });
 
   return (
     <Transition appear show={Boolean(isOpen)} as={Fragment}>

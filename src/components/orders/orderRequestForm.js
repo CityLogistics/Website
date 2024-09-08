@@ -88,7 +88,6 @@ const OrderRequestForm = () => {
     onSubmit: async (values) => {
       setLoading(true);
       const { pickup, dropoff, senderPhone, recipientPhone } = values;
-      console.info({ pickup, dropoff });
       const [pickupLoc, dropOffLoc] = await Promise.all([
         codeAddress(pickup),
         codeAddress(dropoff),
@@ -110,7 +109,6 @@ const OrderRequestForm = () => {
       };
       const { distance, status } = await getDistace(payload);
       setLoading(false);
-      console.info({ distance, status });
       if (status == "OK") {
         const price = getPrice({
           pickup: pickupLoc.province?.toUpperCase(),
@@ -118,7 +116,6 @@ const OrderRequestForm = () => {
           vehicleType: "SALON",
           distance: distance.value,
         });
-        console.info({ distance, pickupLoc, pickupLoc, price });
         if (isNaN(price)) toast.error("Invalid pickup or dropoff address ");
         else
           openModal({
@@ -158,7 +155,6 @@ const OrderRequestForm = () => {
       const { status, error, data } = await instance.post("/orders", payload);
       setLoading(false);
       if (status == 201 && data) {
-        console.info({ data });
         router.push(data.paymentUrl);
       } else toast.error(parseError(error));
     } catch (error) {
@@ -169,7 +165,6 @@ const OrderRequestForm = () => {
   };
 
   const handlePickUpLocationChange = (val, filed) => {
-    console.info({ val, filed });
     formik.setFieldValue(filed, { ...val, address: val.description });
   };
 
@@ -177,7 +172,6 @@ const OrderRequestForm = () => {
     const res = JSON.parse(localStorage.getItem("payload"));
     formik.setValues(res);
   }, []);
-  // console.info(formik.values);
 
   return (
     <div className="">

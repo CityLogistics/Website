@@ -83,7 +83,6 @@ const DriverRequestForm = () => {
         availabiltyTime: [availabiltyTime],
         phoneNumber: formatPhoneNumber(phoneNumber),
       };
-      console.info({ values, payLoad });
 
       if (isTrueSet(ownVehicle)) payLoad["vehicleType"] = vehicleType;
 
@@ -94,8 +93,6 @@ const DriverRequestForm = () => {
         );
         setLoading(false);
         if (status == 201 && data) {
-          console.info({ data });
-
           formik.resetForm();
           toast.success("Driver request saved");
           setTimeout(() => router.push("/"), 2000);
