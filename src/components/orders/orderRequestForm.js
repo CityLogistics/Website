@@ -170,7 +170,7 @@ const OrderRequestForm = () => {
 
   useEffect(() => {
     const res = JSON.parse(localStorage.getItem("payload"));
-    formik.setValues(res);
+    if (res) formik.setValues(res);
   }, []);
 
   return (
@@ -186,7 +186,7 @@ const OrderRequestForm = () => {
           name="senderName"
           title="Sender's Name"
           placeholder="Your name"
-          value={formik.values.senderName}
+          value={formik.values?.senderName}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.senderName && formik.errors.senderName}
@@ -197,7 +197,7 @@ const OrderRequestForm = () => {
           name="email"
           title="Email"
           placeholder="you@company.com"
-          value={formik.values.email}
+          value={formik.values?.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.email && formik.errors.email}
@@ -210,13 +210,13 @@ const OrderRequestForm = () => {
               name="pickup"
               title="Pick Up Location"
               placeholder="The pick-up address"
-              value={formik.values.pickup?.description}
+              value={formik.values?.pickup?.description}
               // onChange={handlePickUpLocationChange}
               onBlur={formik.handleBlur}
               // error={pickupError}
             />
           )}
-          value={formik.values.pickup?.description}
+          value={formik.values?.pickup?.description}
           onChange={(e) => handlePickUpLocationChange(e, "pickup")}
         />
         <PhoneInput
@@ -224,7 +224,7 @@ const OrderRequestForm = () => {
           name="senderPhone"
           title="Pickup Phone Number"
           placeholder="Your phone number"
-          value={formik.values.senderPhone}
+          value={formik.values?.senderPhone}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.senderPhone && formik.errors.senderPhone}
@@ -235,7 +235,7 @@ const OrderRequestForm = () => {
           name="pickUpDate"
           title="Pickup Date"
           placeholder="Pick a date"
-          value={formik.values.pickUpDate}
+          value={formik.values?.pickUpDate}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.pickUpDate && formik.errors.pickUpDate}

@@ -43,7 +43,7 @@ export default FilledInput;
 FilledInput.propTypes = {
   type: PropTypes.string.isRequired, // The type of input (text, email, etc.)
   name: PropTypes.string.isRequired, // The name of the input field
-  onChange: PropTypes.func.isRequired, // Function to handle input change
+  onChange: PropTypes.func, // Function to handle input change
   customStyle: PropTypes.string, // Any additional custom styles for the input
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, // The value of the input
   placeholder: PropTypes.string, // Placeholder text for the input
