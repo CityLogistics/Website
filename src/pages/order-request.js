@@ -19,7 +19,7 @@ const OrderRequest = () => {
       <Toaster richColors position="top-center" />
 
       <div
-        className="relative w-full bg-[url('/images/hero_bg.svg')] md:h-[800px]"
+        className="relative w-full bg-[url('/images/hero_bg.svg')] md:h-[800px] pb-6"
         style={{
           backgroundPosition: "center center",
           backgroundSize: "cover",

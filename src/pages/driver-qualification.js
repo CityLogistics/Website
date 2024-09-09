@@ -9,7 +9,7 @@ const DriverQualification = () => {
       <Toaster richColors position="top-center" />
 
       <div
-        className="relative w-full bg-[url('/images/hero_bg.svg')] md:h-[800px]"
+        className="relative w-full bg-[url('/images/hero_bg.svg')] md:h-[800px] pb-6"
         style={{
           backgroundPosition: "center center",
           backgroundSize: "cover",
@@ -20,7 +20,7 @@ const DriverQualification = () => {
         <Navbar isGradient />
         <DriverHero />
       </div>
-      <div className="mt-3 md:mt-[80vh]">
+      <div className="mt-3 md:mt-[100vh]">
         <Footer />
       </div>
     </div>
