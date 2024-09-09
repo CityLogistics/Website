@@ -94,7 +94,12 @@ export default function MapPicker({ onChange, inputField, ...inputProps }) {
             name="pickUpLocation"
             placeholder="Search"
             // value={pickUpLocation}
-            onChange={(e) => getPlacePredictions({ input: e.target.value })}
+            onChange={(e) =>
+              getPlacePredictions({
+                input: e.target.value,
+                componentRestrictions: { country: "ca" },
+              })
+            }
             className="w-full  px-2 py-2 border rounded-[10px] border-[#BDBDBD] focus:outline-none focus:ring-primary mb-2"
             // disabled
             onClick={() => setOpen(true)}
