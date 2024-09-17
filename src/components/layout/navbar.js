@@ -14,12 +14,9 @@ export const routes = [
     name: "About Us",
     path: "about-us", // ID of the section
   },
+
   {
     name: "Our Vehicles",
-    path: "who-we-are", // ID of the section
-  },
-  {
-    name: "Request Order",
     path: "request-delivery", // ID of the section
   },
   {
@@ -27,13 +24,17 @@ export const routes = [
     path: "driver-recruitment", // ID of the section
   },
   {
+    name: "Who We Are",
+    path: "who-we-are", // ID of the section
+  },
+  {
     name: "Contact Us",
     path: "footer", // ID of the section
   },
-  {
-    name: "Testimonials",
-    path: "testimonials", // ID of the section
-  },
+  // {
+  //   name: "Testimonials",
+  //   path: "testimonials", // ID of the section
+  // },
 ];
 
 const Navbar = ({ isGradient }) => {

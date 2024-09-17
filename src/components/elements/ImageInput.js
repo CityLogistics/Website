@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useCloudinary } from "@/utils";
 import PropTypes from "prop-types";
 import Loader from "../Loader";
@@ -52,7 +53,13 @@ function ImageInput({
         />
       </div>
 
-      {error && <div className="text-rose-300 text-[10px] mt-1">{error}</div>}
+      {error ? (
+        <div className="text-rose-300 text-[10px] mt-1">{error}</div>
+      ) : (
+        <div className="text-black text-[10px] mt-1">
+          Please take a picture with your driver's license{" "}
+        </div>
+      )}
     </div>
   );
 }

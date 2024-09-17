@@ -8,26 +8,26 @@ const Footer = ({ isGradient }) => {
   const quickLinks = [
     { name: "Home", href: "hero" },
     { name: "About Us", href: "about-us" },
-    { name: "Our Vehicles", href: "who-we-are" },
-    { name: "Request Order", href: "request-delivery" },
+    { name: "Our Vehicles", href: "request-delivery" },
     { name: "Enlist as a Driver", href: "driver-recruitment" },
+    { name: "Who We Are", href: "who-we-are" },
   ];
 
   const socialMediaLinks = [
     {
       name: "Facebook",
       icon: "/images/facebook.svg",
-      href: "https://www.facebook.com",
+      href: "https://www.facebook.com/CityLogistics",
     },
     {
       name: "Twitter",
       icon: "/images/twitter.svg",
-      href: "https://www.twitter.com",
+      href: "https://www.twitter.com/mycitylogistics",
     },
     {
       name: "Instagram",
       icon: "/images/instagram.svg",
-      href: "https://www.instagram.com",
+      href: "https://www.instagram.com/mycitylogistics",
     },
   ];
   const handleLinkClick = (path) => {
@@ -138,10 +138,10 @@ const Footer = ({ isGradient }) => {
             </p>
             <p className="text-[10px] md:text-[12px]">
               <a
-                href="mailto:citylogistics@gmail.com"
+                href="mailto:citylogistics101@gmail.com"
                 className="hover:text-gray-400"
               >
-                citylogistics@gmail.com
+                citylogistics101@gmail.com
               </a>
             </p>
             <p className="text-[10px] md:text-[12px]">

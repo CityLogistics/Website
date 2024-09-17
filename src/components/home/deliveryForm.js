@@ -61,6 +61,9 @@ const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
 
   return (
     <div className="font-serif mt-[100px]">
+      <h2 className="text-xl sm:text-2xl text-center font-semibold text-primary mb-2">
+        REQUEST AN ONLINE DELIVERY
+      </h2>
       <Script
         onReady={ready}
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_MAP_KEY}&libraries=places`}

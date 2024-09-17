@@ -31,6 +31,12 @@ function FilledInput({
         onChange={onChange}
         onBlur={onBlur}
         placeholder={placeholder}
+        onFocus={(e) => {
+          // Trigger the picker for both date and time types
+          if (type === "date" || type === "time") {
+            e.target.showPicker(); // Show the picker when focused
+          }
+        }}
       />
 
       {error && <div className="text-rose-300 text-[10px] mt-1">{error}</div>}

@@ -21,7 +21,11 @@ const RequestDelivery = () => {
   }, []);
 
   const handleSelection = (index) => {
-    setSelectedOption(index);
+    if (index === 0) {
+      setSelectedOption(index);
+    } else {
+      setSelectedOption(null);
+    }
   };
 
   const handlePickUpLocationChange = (e) => {
@@ -70,7 +74,7 @@ const RequestDelivery = () => {
     <div className="flex justify-center">
       <div className="w-full mt-10 px-[5%] max-w-8xl">
         <h2 className="text-xl sm:text-2xl text-center font-semibold text-primary mb-8">
-          REQUEST AN ONLINE DELIVERY
+          OUR VEHICLES
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 px-6 lg:px-[120px]">
           {deliveryOptions.map((option, index) => (
@@ -101,14 +105,49 @@ const RequestDelivery = () => {
                   {option.description}
                 </p>
                 <p className="text-lg md:text-xl ">{option.price}</p>
+                {index !== 0 && (
+                  <div>
+                    <p className="font-serif text-sm md:text-base md:mb-2 ">
+                      To get the price of this?
+                    </p>
+                    <a
+                      href={`${
+                        index === 1
+                          ? "mailto:citylogistics101@gmail.com?subject=Quote Request for Large (Bus) Vehicle&body=I would like to request a quote for the Large (Bus) vehicle."
+                          : "mailto:citylogistics101@gmail.com?subject=Quote Request for Extra Large (Truck) Vehicle&body=I would like to request a quote for the Extra Large (Truck) vehicle."
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        className="flex items-center justify-center w-full font-serif text-sm text-white md:text-base"
+                      >
+                        <p>Request a quote</p>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-4"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                          />
+                        </svg>
+                      </button>
+                    </a>
+                  </div>
+                )}
               </div>
 
               {/* Footer-like elements */}
               <div
                 className={`relative w-[220px] h-[120px] mt-[40px] cursor-pointer rounded-[20px] ${
-                  selectedOption === index
-                    ? "bg-primary"
-                    : "bg-[#EFEFEF] hover:bg-primary"
+                  index === 0 ? "hover:bg-primary" : ""
+                } ${
+                  selectedOption === index ? "bg-primary" : "bg-[#EFEFEF] "
                 } p-2 ${
                   index === 0 ? "ml-auto" : index === 1 ? "mx-auto" : "mr-auto"
                 }`}
@@ -156,7 +195,7 @@ export const deliveryOptions = [
   {
     title: "LARGE (BUS)",
     description: "Parcels that optimally fit a standard pickup truck.",
-    price: "$16.00 + $1/Km",
+    price: "",
     image: "/images/large_bus.svg",
     backgroundImage: "/images/person-2.svg",
     footerText: "LARGE",
@@ -165,7 +204,7 @@ export const deliveryOptions = [
   {
     title: "EXTRA LARGE (TRUCK)",
     description: 'Parcels that optimally fit a standard 10"-15" trailer truck.',
-    price: "$17.00 + $1/Km",
+    price: "",
     image: "/images/extra_large_truck.svg",
     backgroundImage: "/images/person-3.svg",
     footerText: "EXTRA LARGE",
