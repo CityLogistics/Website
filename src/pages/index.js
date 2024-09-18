@@ -63,7 +63,7 @@ export default function Home() {
       {showScroll && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-10 right-10 p-3 bg-primary text-white rounded-full shadow-lg transition-colors duration-300"
+          className="fixed bottom-10 right-10 p-3 bg-primary text-white rounded-full shadow-lg transition-colors duration-300 z-[1000]"
           aria-label="Scroll to top"
         >
           <svg
@@ -72,7 +72,7 @@ export default function Home() {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="size-6"
+            class="size-7"
           >
             <path
               stroke-linecap="round"

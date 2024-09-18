@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { Link as ScrollLink } from "react-scroll";
 import InstallPWAButton from "../elements/pwaButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Footer = ({ isGradient }) => {
   const router = useRouter();
