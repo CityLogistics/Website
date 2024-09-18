@@ -2,9 +2,29 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { Link as ScrollLink } from "react-scroll";
 import InstallPWAButton from "../elements/pwaButton";
+import { useState } from "react";
 
 const Footer = ({ isGradient }) => {
   const router = useRouter();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Function to check screen width and set isMobile state
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 700);
+  };
+
+  useEffect(() => {
+    // Set initial state
+    handleResize();
+
+    // Add event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const quickLinks = [
     { name: "Home", href: "hero" },
@@ -82,7 +102,7 @@ const Footer = ({ isGradient }) => {
             <p>WE LOOK FORWARD TO SERVING YOU</p>
           </div>
         </div>
-        <div className="font-serif w-full grid grid-cols-2 lg:grid-cols-5">
+        <div className="font-serif w-full grid grid-cols-2 lg:grid-cols-4">
           {/* Company Info */}
           <div className="flex flex-col mt-[25px]" id="company-info">
             <div className="cursor-pointer">
@@ -172,10 +192,12 @@ const Footer = ({ isGradient }) => {
               ))}
             </div>
           </div>
-          <div className="flex flex-col items-end mt-[75px]">
-            <p className="font-bold mb-4">Install App</p>
-            <InstallPWAButton />
-          </div>
+          {isMobile && (
+            <div className="flex flex-col items-end mt-[75px]">
+              <p className="font-bold mb-4">Install App</p>
+              <InstallPWAButton />
+            </div>
+          )}
         </div>
 
         <div className="font-serif md:flex items-center justify-between mt-12 text-[12px] md:text-sm border-t-[0.5px] border-white py-6">
