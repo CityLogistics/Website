@@ -82,10 +82,10 @@ const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
               >
                 Pick Up Location
               </label>
-              <MapPicker
+              {/* <MapPicker
                 value={formik.values.pickup?.description}
                 onChange={(e) => handlePickUpLocationChange(e, "pickup")}
-              />
+              /> */}
               {formik.touched.pickup && formik.errors.pickup ? (
                 <div className="text-rose-300 text-[12px] ml-1">
                   {formik.errors.pickup.description}
@@ -100,10 +100,10 @@ const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
               >
                 Drop Off Location
               </label>
-              <MapPicker
+              {/* <MapPicker
                 value={formik.values.dropoff?.description}
                 onChange={(e) => handlePickUpLocationChange(e, "dropoff")}
-              />
+              /> */}
               {formik.touched.dropoff && formik.errors.dropoff ? (
                 <div className="text-rose-300 text-[12px] ml-1">
                   {formik.errors.dropoff.description}

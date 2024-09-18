@@ -168,9 +168,9 @@ const Navbar = ({ isGradient }) => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
-                class="size-8 text-white"
+                className="size-8 text-white"
               >
                 <path
                   stroke-linecap="round"
@@ -195,5 +195,5 @@ const Navbar = ({ isGradient }) => {
 export default Navbar;
 
 Navbar.propTypes = {
-  isGradient: PropTypes.bool.isRequired,
+  isGradient: PropTypes.bool,
 };

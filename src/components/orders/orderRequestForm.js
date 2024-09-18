@@ -203,7 +203,7 @@ const OrderRequestForm = () => {
           error={formik.touched.email && formik.errors.email}
         />
 
-        <MapPicker
+        {/* <MapPicker
           inputField={() => (
             <FilledInput
               type="text"
@@ -218,7 +218,7 @@ const OrderRequestForm = () => {
           )}
           value={formik.values?.pickup?.description}
           onChange={(e) => handlePickUpLocationChange(e, "pickup")}
-        />
+        /> */}
         <PhoneInput
           type="tel"
           name="senderPhone"
@@ -262,7 +262,7 @@ const OrderRequestForm = () => {
           error={formik.touched.recipientName && formik.errors.recipientName}
         />
 
-        <MapPicker
+        {/* <MapPicker
           inputField={() => (
             <FilledInput
               type="text"
@@ -277,7 +277,7 @@ const OrderRequestForm = () => {
           )}
           value={formik.values.dropoff?.description}
           onChange={(e) => handlePickUpLocationChange(e, "dropoff")}
-        />
+        /> */}
 
         <PhoneInput
           type="tel"

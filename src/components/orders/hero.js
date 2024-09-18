@@ -6,7 +6,7 @@ const OrderHero = () => {
     <div className="relative mt-[40px] md:mt-[70px]">
       <div className="md:absolute w-full md:top-0 z-0">
         <div className="flex justify-center w-full">
-          <div className="w-full md:flex justify-between px-[5%] max-w-8xl gap-6">
+          <div className="w-full md:flex justify-between px-[5%] max-w-8xl gap-6 pb-[20px]">
             <div className="md:w-[40%]">
               <p className="text-2xl sm:text-[50px] font-semibold text-white">
                 YOUR TRUST PARTNER IN DELIVERY

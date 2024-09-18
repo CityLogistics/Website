@@ -134,5 +134,5 @@ MobileMenu.propTypes = {
   isMobileOpen: PropTypes.bool.isRequired,
   toggleMobileMenu: PropTypes.func.isRequired,
   routes: PropTypes.array.isRequired,
-  isGradient: PropTypes.bool.isRequired,
+  isGradient: PropTypes.bool,
 };
