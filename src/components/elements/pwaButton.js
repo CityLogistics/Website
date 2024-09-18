@@ -49,12 +49,15 @@ export default function InstallPWAButton() {
   }
 
   return (
-    <button
-      onClick={handleInstallClick}
-      type="button"
-      className="text-white text-[12px] md:text-sm"
-    >
-      Click here to Add App to Home Screen
-    </button>
+    <div className="flex flex-col items-end mt-[75px]">
+      <p className="font-bold mb-4">Install App</p>
+      <button
+        onClick={handleInstallClick}
+        type="button"
+        className="text-white text-[12px] md:text-sm text-center font-semibold"
+      >
+        Click here to Add App to Home Screen
+      </button>
+    </div>
   );
 }

@@ -192,12 +192,7 @@ const Footer = ({ isGradient }) => {
               ))}
             </div>
           </div>
-          {isMobile && (
-            <div className="flex flex-col items-end mt-[75px]">
-              <p className="font-bold mb-4">Install App</p>
-              <InstallPWAButton />
-            </div>
-          )}
+          {isMobile && <InstallPWAButton />}
         </div>
 
         <div className="font-serif md:flex items-center justify-between mt-12 text-[12px] md:text-sm border-t-[0.5px] border-white py-6">
