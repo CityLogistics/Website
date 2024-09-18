@@ -15,6 +15,12 @@ export default function App({ Component, pageProps }) {
     <>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <link rel="manifest" href="/manifest.json" />
+        <title>City Logistics - Delivery Services</title>
+        <meta
+          name="description"
+          content="We provide exceptional delivery services that exceed your expectations!"
+        />
       </Head>
       <main className={`${antonio.variable} font-sans`}>
         <Component {...pageProps} />

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Link as ScrollLink } from "react-scroll";
+import InstallPWAButton from "../elements/pwaButton";
 
 const Footer = ({ isGradient }) => {
   const router = useRouter();
@@ -16,8 +17,8 @@ const Footer = ({ isGradient }) => {
   const socialMediaLinks = [
     {
       name: "Facebook",
-      icon: "/images/facebook.svg",
-      href: "https://www.facebook.com/CityLogistics",
+      icon: "/images/Facebook.svg",
+      href: "https://www.facebook.com/share/6Af5QYTF3Vkwmuh8/?mibextid=qi2Omg",
     },
     {
       name: "Twitter",
@@ -81,7 +82,7 @@ const Footer = ({ isGradient }) => {
             <p>WE LOOK FORWARD TO SERVING YOU</p>
           </div>
         </div>
-        <div className="font-serif w-full grid grid-cols-2 lg:grid-cols-4">
+        <div className="font-serif w-full grid grid-cols-2 lg:grid-cols-5">
           {/* Company Info */}
           <div className="flex flex-col mt-[25px]" id="company-info">
             <div className="cursor-pointer">
@@ -170,6 +171,10 @@ const Footer = ({ isGradient }) => {
                 </a>
               ))}
             </div>
+          </div>
+          <div className="flex flex-col items-end mt-[75px]">
+            <p className="font-bold mb-4">Install App</p>
+            <InstallPWAButton />
           </div>
         </div>
 
