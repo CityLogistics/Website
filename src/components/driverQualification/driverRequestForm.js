@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import PhoneInput from "../elements/phoneInput";
 import { WidgetLoader } from "react-cloudinary-upload-widget";
 import ImageInput from "../elements/ImageInput";
+import MultipleCheckboxGrid from "../elements/multipleCheckBox";
 
 const DriverRequestForm = () => {
   // Validation schema
@@ -35,8 +36,14 @@ const DriverRequestForm = () => {
     hasValidVehicleInsurance: yup
       .string()
       .required("Insurance status is required"),
-    availabiltyDays: yup.string().required("Availability is required"),
-    availabiltyTime: yup.string().required("Time available is required"),
+    availabiltyDays: yup
+      .array()
+      .min(1, "Please select at least one day of availability")
+      .required("Availability is required"),
+    availabiltyTime: yup
+      .array()
+      .min(1, "Please select at least one day of availability")
+      .required("Time available is required"),
     preferredTimeZone: yup.string().required("Delivery zone is required"),
     image: yup.string().required("Image is required"),
   });
@@ -56,8 +63,8 @@ const DriverRequestForm = () => {
       vehicleType: "",
       hasValidLicense: "true",
       hasValidVehicleInsurance: "true",
-      availabiltyDays: "",
-      availabiltyTime: "",
+      availabiltyDays: [],
+      availabiltyTime: [],
       preferredTimeZone: "",
     },
     validationSchema: validationSchema,
@@ -79,8 +86,8 @@ const DriverRequestForm = () => {
         ownVehicle: isTrueSet(ownVehicle),
         hasValidLicense: isTrueSet(hasValidLicense),
         hasValidVehicleInsurance: isTrueSet(hasValidVehicleInsurance),
-        availabiltyDays: [availabiltyDays],
-        availabiltyTime: [availabiltyTime],
+        availabiltyDays: availabiltyDays,
+        availabiltyTime: availabiltyTime,
         phoneNumber: formatPhoneNumber(phoneNumber),
       };
 
@@ -118,7 +125,6 @@ const DriverRequestForm = () => {
   ];
 
   const availabilityOptions = [
-    { value: "", title: "Select availability" },
     { value: "MONDAY", title: "Mondays" },
     { value: "TUESDAY", title: "Tuesdays" },
     { value: "WEDNESDAY", title: "Wednesdays" },
@@ -129,7 +135,6 @@ const DriverRequestForm = () => {
   ];
 
   const timeOptions = [
-    { value: "", title: "Select time available" },
     { value: "MORNING", title: "Mornings (8 am to 12 noon)" },
     { value: "AFTERNOON", title: "Afternoons (12 pm to 5 pm)" },
     { value: "EVENING", title: "Evenings (5 pm to 9 pm)" },
@@ -268,7 +273,7 @@ const DriverRequestForm = () => {
           }
         />
 
-        <Dropdown
+        <MultipleCheckboxGrid
           name="availabiltyDays"
           title="Availability"
           options={availabilityOptions}
@@ -284,7 +289,7 @@ const DriverRequestForm = () => {
           }
         />
 
-        <Dropdown
+        <MultipleCheckboxGrid
           name="availabiltyTime"
           title="Time Available"
           options={timeOptions}
