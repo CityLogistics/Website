@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { deliveryOptions } from "../home/requestDelivery";
 import {
   Dialog,
@@ -21,8 +21,16 @@ const ConfirmOrderModal = ({
   handleDropOffLocationChange,
   handlePickUpLocationChange,
   onConfirm,
+  preselectedVehicleType,
 }) => {
-  const [selectedOption, setSelectedOption] = useState(deliveryOptions[0]);
+  const [selectedOption, setSelectedOption] = useState(
+    deliveryOptions[0].value
+  );
+
+  useEffect(() => {
+    setSelectedOption(preselectedVehicleType);
+  }, [preselectedVehicleType]);
+
   const handleSelection = (index) => {
     setSelectedOption(index);
   };
@@ -33,7 +41,7 @@ const ConfirmOrderModal = ({
   const price = getPrice({
     pickup: pickUpProvince?.toUpperCase(),
     dropoff: dropOffProvince?.toUpperCase(),
-    vehicleType: selectedOption.value,
+    vehicleType: selectedOption,
     distance: value,
   });
 
@@ -99,7 +107,7 @@ const ConfirmOrderModal = ({
                     <div
                       key={index}
                       className={`relative w-[220px] h-[120px] mt-[40px] cursor-pointer rounded-[20px] ${
-                        selectedOption.value === option.value
+                        selectedOption === option.value
                           ? "bg-primary"
                           : "bg-[#EFEFEF] hover:bg-primary"
                       } p-2 ${
@@ -109,7 +117,7 @@ const ConfirmOrderModal = ({
                           ? "mx-auto"
                           : "mr-auto"
                       }`}
-                      onClick={() => handleSelection(option)}
+                      onClick={() => handleSelection(option.value)}
                     >
                       <img
                         src={option.image}

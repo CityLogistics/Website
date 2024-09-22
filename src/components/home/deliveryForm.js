@@ -8,7 +8,7 @@ import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 
 /* eslint-disable react/no-unescaped-entities */
-const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
+const DeliveryForm = ({ selectedOption }) => {
   const ready = async () => {};
 
   const handlePickUpLocationChange = (val, filed) => {
@@ -53,7 +53,10 @@ const DeliveryForm = ({ pickUpLocation, dropOffLocation }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      localStorage.setItem("payload", JSON.stringify(values));
+      localStorage.setItem(
+        "payload",
+        JSON.stringify({ ...values, vehicleType: selectedOption })
+      );
       router.push("/order-request");
       // Add your form submission logic here
     },

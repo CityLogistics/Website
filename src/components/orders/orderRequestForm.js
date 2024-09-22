@@ -82,6 +82,7 @@ const OrderRequestForm = () => {
       dropoff: {},
       pickup: {},
       pickuptime: "",
+      vehicleType: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -319,6 +320,7 @@ const OrderRequestForm = () => {
         pickUpLocation={formik.values.pickup}
         dropOffLocation={formik.values.dropoff}
         onConfirm={(vehicleType) => onConfirm(vehicleType)}
+        preselectedVehicleType={formik.values.vehicleType}
       />
     </div>
   );

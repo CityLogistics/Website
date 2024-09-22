@@ -6,8 +6,7 @@ import DeliveryForm from "./deliveryForm";
 
 const RequestDelivery = () => {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [pickUpLocation, setPickUpLocation] = useState("");
-  const [dropOffLocation, setDropOffLocation] = useState("");
+
   const cardRefs = useRef([]);
 
   useEffect(() => {
@@ -27,48 +26,6 @@ const RequestDelivery = () => {
       setSelectedOption(null);
     }
   };
-
-  const handlePickUpLocationChange = (e) => {
-    setPickUpLocation(e.target.value);
-  };
-
-  const handleDropOffLocationChange = (e) => {
-    setDropOffLocation(e.target.value);
-  };
-
-  const validationSchema = yup.object({
-    senderName: yup
-      .string("Enter sender's name")
-      .required("Sender's name is required"),
-    recipientName: yup
-      .string("Enter recipient's name")
-      .required("Recipient's name is required"),
-    senderPhone: yup
-      .string("Enter sender's phone number")
-      .required("Sender's phone number is required"),
-    recipientPhone: yup
-      .string("Enter recipient's phone number")
-      .required("Recipient's phone number is required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      senderName: "",
-      recipientName: "",
-      senderPhone: "",
-      recipientPhone: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      const payload = {
-        ...values,
-        pickUpLocation,
-        dropOffLocation,
-      };
-      console.log(payload);
-      // Add your form submission logic here
-    },
-  });
 
   return (
     <div className="flex justify-center">
@@ -145,13 +102,13 @@ const RequestDelivery = () => {
               {/* Footer-like elements */}
               <div
                 className={`relative w-[220px] h-[120px] mt-[40px] cursor-pointer rounded-[20px] ${
-                  index === 0 ? "hover:bg-primary" : ""
-                } ${
-                  selectedOption === index ? "bg-primary" : "bg-[#EFEFEF] "
+                  selectedOption === option.value
+                    ? "bg-primary"
+                    : "bg-[#EFEFEF] hover:bg-primary"
                 } p-2 ${
                   index === 0 ? "ml-auto" : index === 1 ? "mx-auto" : "mr-auto"
                 }`}
-                onClick={() => handleSelection(index)}
+                onClick={() => handleSelection(option.value)}
               >
                 <img
                   src={option.image}
@@ -168,13 +125,7 @@ const RequestDelivery = () => {
         </div>
 
         {/* Pass necessary props to the form */}
-        <DeliveryForm
-          pickUpLocation={pickUpLocation}
-          dropOffLocation={dropOffLocation}
-          handlePickUpLocationChange={handlePickUpLocationChange}
-          handleDropOffLocationChange={handleDropOffLocationChange}
-          formik={formik}
-        />
+        <DeliveryForm selectedOption={selectedOption} />
       </div>
     </div>
   );
