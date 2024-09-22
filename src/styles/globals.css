@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 @layer utilities {
   .back-grad {
     background: linear-gradient(to bottom, #FFEFE2, #FFFFFF, #FFEFE2);
