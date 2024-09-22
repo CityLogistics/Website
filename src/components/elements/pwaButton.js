@@ -46,12 +46,12 @@ export default function InstallPWAButton() {
 
   if (isIos) {
     return (
-      <div className="flex flex-col items-end mt-[75px]">
-        <p className="font-bold mb-4">Install App on iOS</p>
-        <p className="text-white text-[12px] md:text-sm text-center font-semibold">
+      <div className="mt-[75px]">
+        <div className="font-bold mb-4">Install App on iOS</div>
+        <div className="text-white text-[13px] md:text-sm">
           To install this app on your iPhone/iPad, tap <strong>Share</strong>{" "}
           then <strong>Add to Home Screen</strong>.
-        </p>
+        </div>
       </div>
     );
   }
@@ -61,12 +61,12 @@ export default function InstallPWAButton() {
   }
 
   return (
-    <div className="flex flex-col items-end mt-[75px]">
-      <p className="font-bold mb-4">Install App</p>
+    <div className="mt-[75px]">
+      <div className="font-bold mb-4">Install App</div>
       <button
         onClick={handleInstallClick}
         type="button"
-        className="text-white text-[12px] md:text-sm text-center font-semibold"
+        className="text-white text-[13px] md:text-sm text-center font-semibold"
       >
         Click here to Add App to Home Screen
       </button>

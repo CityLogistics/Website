@@ -116,6 +116,7 @@ const Navbar = ({ isGradient }) => {
                 alt="nav-logo"
                 width={100}
                 height={100}
+                quality={100}
               />
             </ScrollLink>
           </div>

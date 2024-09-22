@@ -64,9 +64,8 @@ const OrderRequestForm = () => {
         .string("Enter drop off address")
         .required("Drop off address is required"),
     }),
-    discription: yup
-      .string("Enter discription")
-      .required("Discription is required"),
+    discription: yup.string("Enter discription"),
+    // .required("Discription is required"),
     pickuptime: yup
       .string("Enter pickup time")
       .required("Pickup time is required"),

@@ -94,7 +94,7 @@ const ConfirmOrderModal = ({
                 </h2>
 
                 {/* Vehicle Options */}
-                <div className="flex flex-col md:flex-row justify-between mb-4">
+                <div className="flex flex-col md:flex-row  mb-4">
                   {deliveryOptions.slice(0, 1).map((option, index) => (
                     <div
                       key={index}
