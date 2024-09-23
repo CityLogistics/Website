@@ -14,6 +14,7 @@ import PhoneInput from "../elements/phoneInput";
 import { WidgetLoader } from "react-cloudinary-upload-widget";
 import ImageInput from "../elements/ImageInput";
 import MultipleCheckboxGrid from "../elements/multipleCheckBox";
+import ImageComponent from "../ImageComponent";
 
 const DriverRequestForm = () => {
   // Validation schema
@@ -158,13 +159,17 @@ const DriverRequestForm = () => {
           Please fill in the details below
         </p>
 
-        <ImageInput
-          title="Driver's Picture"
-          placeholder="Your picture"
-          onChange={(file) => formik.setFieldValue("image", file)}
-          value={formik.values.image}
-          error={formik.touched.image && formik.errors.image}
-        />
+        <div className="text-black text-[10px] mt-1">
+          Please select a picture of your driver's license{" "}
+        </div>
+
+        <div>
+          <ImageComponent
+            onChange={(file) => formik.setFieldValue("image", file)}
+            value={formik.values.image}
+            error={formik.touched.image && formik.errors.image}
+          />
+        </div>
 
         <FilledInput
           type="text"

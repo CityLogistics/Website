@@ -10,8 +10,6 @@ const OrderRequest = () => {
   //   googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_KEY,
   // });
 
-  // console.info({ loadError });
-
   // if (!isLoaded) return;
 
   return (

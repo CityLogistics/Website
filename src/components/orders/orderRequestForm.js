@@ -17,6 +17,7 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PhoneInput from "../elements/phoneInput";
+import { useSearchParams } from "next/navigation";
 
 const OrderRequestForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,8 +65,9 @@ const OrderRequestForm = () => {
         .string("Enter drop off address")
         .required("Drop off address is required"),
     }),
-    discription: yup.string("Enter discription"),
-    // .required("Discription is required"),
+    discription: yup
+      .string("Enter discription")
+      .required("Discription is required"),
     pickuptime: yup
       .string("Enter pickup time")
       .required("Pickup time is required"),
@@ -110,13 +112,14 @@ const OrderRequestForm = () => {
       const { distance, status } = await getDistace(payload);
       setLoading(false);
       if (status == "OK") {
-        const price = getPrice({
+        const { totalPrice } = getPrice({
           pickup: pickupLoc.province?.toUpperCase(),
           dropoff: dropOffLoc.province?.toUpperCase(),
           vehicleType: "SALON",
           distance: distance.value,
         });
-        if (isNaN(price)) toast.error("Invalid pickup or dropoff address ");
+        if (isNaN(totalPrice))
+          toast.error("Invalid pickup or dropoff address ");
         else
           openModal({
             ...distance,
@@ -135,7 +138,7 @@ const OrderRequestForm = () => {
 
   const onConfirm = async (vehicleType) => {
     const { pickupLoc, dropOffLoc } = isModalOpen;
-    closeModal();
+
     setLoading(true);
     const { senderPhone, recipientPhone, pickup, dropoff, ...values } =
       formik.values;
@@ -146,14 +149,16 @@ const OrderRequestForm = () => {
         pickupPhoneNumber: formatPhoneNumber(senderPhone),
         dropOffPhoneNumber: formatPhoneNumber(recipientPhone),
         type: "HEALTH_AND_MEDICINE",
-        vehicleType,
         ...values,
+        vehicleType,
         pickupAddress: pickupLoc,
         dropOffAddress: dropOffLoc,
       };
 
       const { status, error, data } = await instance.post("/orders", payload);
       setLoading(false);
+      closeModal();
+
       if (status == 201 && data) {
         router.push(data.paymentUrl);
       } else toast.error(parseError(error));
@@ -168,10 +173,13 @@ const OrderRequestForm = () => {
     formik.setFieldValue(filed, { ...val, address: val.description });
   };
 
+  const search = useSearchParams();
+
   useEffect(() => {
-    const res = JSON.parse(localStorage.getItem("payload"));
+    const res = JSON.parse(search.get("data"));
+    // const res = JSON.parse(localStorage.getItem("payload"));
     if (res) formik.setValues(res);
-  }, []);
+  }, [search]);
 
   return (
     <div className="">
@@ -319,8 +327,9 @@ const OrderRequestForm = () => {
         onClose={closeModal}
         pickUpLocation={formik.values.pickup}
         dropOffLocation={formik.values.dropoff}
-        onConfirm={(vehicleType) => onConfirm(vehicleType)}
+        onConfirm={onConfirm}
         preselectedVehicleType={formik.values.vehicleType}
+        loading={loading}
       />
     </div>
   );

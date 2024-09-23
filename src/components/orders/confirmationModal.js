@@ -10,6 +10,7 @@ import {
 import FilledInput from "../elements/filledInput";
 import PrimaryButton from "../elements/primaryButton";
 import { getPrice } from "@/utils";
+import Loader from "../Loader";
 
 const ConfirmOrderModal = ({
   isOpen,
@@ -22,6 +23,7 @@ const ConfirmOrderModal = ({
   handlePickUpLocationChange,
   onConfirm,
   preselectedVehicleType,
+  loading,
 }) => {
   const [selectedOption, setSelectedOption] = useState(
     deliveryOptions[0].value
@@ -38,7 +40,7 @@ const ConfirmOrderModal = ({
   if (!isOpen) return null;
   const { pickUpProvince, dropOffProvince, value } = isOpen;
 
-  const price = getPrice({
+  const { totalPrice, basePrice, pricePerKm } = getPrice({
     pickup: pickUpProvince?.toUpperCase(),
     dropoff: dropOffProvince?.toUpperCase(),
     vehicleType: selectedOption,
@@ -50,7 +52,7 @@ const ConfirmOrderModal = ({
       <Dialog
         as="div"
         className="font-sans fixed inset-0 z-[99999999] flex items-center justify-center"
-        onClose={onClose}
+        onClose={loading ? () => null : () => onClose()}
       >
         <TransitionChild
           as={Fragment}
@@ -78,7 +80,7 @@ const ConfirmOrderModal = ({
               <div className=" ">
                 {/* Close Button */}
                 <button
-                  onClick={onClose}
+                  onClick={loading ? () => null : () => onClose()}
                   className="absolute top-0 right-4 text-gray-500 hover:text-gray-700"
                 >
                   <svg
@@ -174,18 +176,62 @@ const ConfirmOrderModal = ({
                 <FilledInput
                   type="text"
                   name="price"
-                  title="Total to Pay:"
+                  title="Total Distance"
                   customStyle="h-[60px] text-xl text-black"
-                  value={`$${price / 100}`}
+                  // value={`${(value / 1000).toFixed(2)}KM`}
+                  value={`${Math.ceil(value / 1000)}KM`}
                   disabled
                 />
+
+                <FilledInput
+                  type="text"
+                  name="price"
+                  title="Vehicle Size Price"
+                  customStyle="h-[60px] text-xl text-black"
+                  value={`$${basePrice / 100}`}
+                  disabled
+                />
+
+                <FilledInput
+                  type="text"
+                  name="price"
+                  title="Price Per KM"
+                  customStyle="h-[60px] text-xl text-black"
+                  value={`$${pricePerKm / 100}`}
+                  disabled
+                />
+
+                {/* <FilledInput
+                  type="text"
+                  name="price"
+                  title="Vehicle Size Price"
+                  customStyle="h-[60px] text-xl text-black"
+                  value={`$${(vehiclePrice ?? 0) / 100}`}
+                  disabled
+                /> */}
+
+                <FilledInput
+                  type="text"
+                  name="price"
+                  title="Total to Pay:"
+                  customStyle="h-[60px] text-xl text-black"
+                  value={isNaN(totalPrice) ? "" : `$${(totalPrice ?? 0) / 100}`}
+                  disabled
+                />
+
                 {/* Confirm Button */}
                 <div className="flex justify-center mt-6">
                   <PrimaryButton
                     type="submit"
-                    handleClick={() => onConfirm(selectedOption.value)}
+                    handleClick={() => onConfirm(selectedOption)}
+                    disabled={isNaN(totalPrice) || !selectedOption}
+                    customStyle=" w-full"
                   >
-                    CONFIRM YOUR REQUEST
+                    {loading ? (
+                      <Loader dotClassess="bg-white" />
+                    ) : (
+                      "CONFIRM YOUR REQUEST"
+                    )}
                   </PrimaryButton>
                 </div>
 

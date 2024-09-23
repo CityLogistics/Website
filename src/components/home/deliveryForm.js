@@ -5,7 +5,7 @@ import Script from "next/script";
 import MapPicker from "../elements/mapPicker";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 /* eslint-disable react/no-unescaped-entities */
 const DeliveryForm = ({ selectedOption }) => {
@@ -53,11 +53,17 @@ const DeliveryForm = ({ selectedOption }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      localStorage.setItem(
-        "payload",
-        JSON.stringify({ ...values, vehicleType: selectedOption })
-      );
-      router.push("/order-request");
+      // localStorage.setItem(
+      //   "payload",
+      //   JSON.stringify({ ...values, vehicleType: selectedOption })
+      // );
+      // router.push("/order-request",{});
+      router.push({
+        pathname: "/order-request",
+        query: {
+          data: JSON.stringify({ ...values, vehicleType: selectedOption }),
+        },
+      });
       // Add your form submission logic here
     },
   });

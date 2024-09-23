@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export const regionalPrices = {
-  ALBERTA: 1600,
+  ALBERTA: 1500,
   BRITISH_COLUMBIA: 1500,
   MANITOBA: 1500,
   NEWFOUNDLAND_AND_LABRADOR: 1500,
@@ -18,7 +18,7 @@ export const regionalPrices = {
 
 export const vehiclePrices = {
   SALON: 800,
-  FIVE_SEATER_SUV: 1600,
+  FIVE_SEATER_SUV: 1500,
   SEVEN_SEATER_SUV: 2000,
   TRUCK: 1800,
   VAN: 1700,
@@ -106,10 +106,10 @@ export function getPrice({ pickup, dropoff, distance, vehicleType }) {
   const basePrice = Math.max(regionalPrices[pickup], regionalPrices[dropoff]);
   const vehiclePrice = vehiclePrices[vehicleType];
 
-  const totalPrice =
-    basePrice + Math.ceil(distance / 1000) * pricePerKm + vehiclePrice;
+  const totalPrice = basePrice + Math.ceil(distance / 1000) * pricePerKm;
+  // + vehiclePrice;
 
-  return totalPrice;
+  return { totalPrice, basePrice, vehiclePrice, pricePerKm };
 }
 
 export function formatPhoneNumber(phone) {

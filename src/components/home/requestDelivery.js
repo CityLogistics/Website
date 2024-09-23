@@ -141,7 +141,7 @@ export const deliveryOptions = [
     image: "/images/suv_minivan.svg",
     backgroundImage: "/images/person-1.svg",
     footerText: "BELOW 50KG",
-    value: "SALON",
+    value: "FIVE_SEATER_SUV",
   },
   {
     title: "LARGE (BUS)",
