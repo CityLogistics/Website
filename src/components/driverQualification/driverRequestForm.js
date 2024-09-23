@@ -159,10 +159,6 @@ const DriverRequestForm = () => {
           Please fill in the details below
         </p>
 
-        <div className="text-black text-[10px] mt-1">
-          Please select a picture of your driver's license{" "}
-        </div>
-
         <div>
           <ImageComponent
             onChange={(file) => formik.setFieldValue("image", file)}

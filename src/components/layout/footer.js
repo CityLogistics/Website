@@ -159,10 +159,10 @@ const Footer = ({ isGradient }) => {
             </p>
             <p className="text-[10px] md:text-[12px]">
               <a
-                href="mailto:citylogistics101@gmail.com"
+                href="mailto:info@mycitylogistics.ca"
                 className="hover:text-gray-400"
               >
-                citylogistics101@gmail.com
+                info@mycitylogistics.ca
               </a>
             </p>
             <p className="text-[10px] md:text-[12px]">

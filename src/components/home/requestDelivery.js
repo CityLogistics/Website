@@ -70,8 +70,8 @@ const RequestDelivery = () => {
                     <a
                       href={`${
                         index === 1
-                          ? "mailto:citylogistics101@gmail.com?subject=Quote Request for Large (Bus) Vehicle&body=I would like to request a quote for the Large (Bus) vehicle."
-                          : "mailto:citylogistics101@gmail.com?subject=Quote Request for Extra Large (Truck) Vehicle&body=I would like to request a quote for the Extra Large (Truck) vehicle."
+                          ? "mailto:info@mycitylogistics.ca?subject=Quote Request for Large (Bus) Vehicle&body=I would like to request a quote for the Large (Bus) vehicle."
+                          : "mailto:info@mycitylogistics.ca?subject=Quote Request for Extra Large (Truck) Vehicle&body=I would like to request a quote for the Extra Large (Truck) vehicle."
                       }`}
                     >
                       <button
