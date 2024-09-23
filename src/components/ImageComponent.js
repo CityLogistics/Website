@@ -33,7 +33,7 @@ export default function ImageComponent({ onChange, value, error }) {
         <Loader dotClassess="bg-[#F68716] w-2 h-2 " />
       ) : (
         <div
-          className="text-[#F68716]  font-semibold text-sm mt-2 cursor-pointer"
+          className="text-[#F68716] text-center font-semibold text-sm mt-2 cursor-pointer"
           onClick={launchWidget}
         >
           Upload a photo of yourself holding your driver’s license.
