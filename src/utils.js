@@ -146,6 +146,8 @@ export const useCloudinary = (setFile) => {
           cloudName: "workstedi",
           uploadPreset: "lm1ip4fw",
           api_key: "455779734655193",
+          multiple: false,
+          maxFileSize: 1048576,
         },
         (error, result) => {
           setLoading(false);

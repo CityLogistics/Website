@@ -36,7 +36,7 @@ export default function ImageComponent({ onChange, value, error }) {
           className="text-[#F68716] text-center font-semibold text-sm mt-2 cursor-pointer"
           onClick={launchWidget}
         >
-          Upload a photo of yourself holding your driver’s license.
+          Upload a photo of yourself holding your driver’s license
         </div>
       )}
       {error && <div className="text-rose-300 text-[10px] mt-1">{error}</div>}
