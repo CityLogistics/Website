@@ -159,7 +159,7 @@ const DriverRequestForm = () => {
           Please fill in the details below
         </p>
 
-        <div>
+        <div className="mb-5">
           <ImageComponent
             onChange={(file) => formik.setFieldValue("image", file)}
             value={formik.values.image}

@@ -34,14 +34,14 @@ function MultipleCheckboxGrid({
         {" "}
         {/* Grid layout for 3 columns */}
         {options.map((option) => (
-          <label key={option.value} className="flex items-center space-x-2">
+          <label key={option.value} className="flex items-start space-x-2">
             <input
               type="checkbox"
               name={name}
               value={option.value}
               checked={value.includes(option.value)}
               onChange={handleOptionChange}
-              className="form-checkbox"
+              className="form-checkbox mt-1"
             />
             <span className="text-[12px]">{option.title}</span>
           </label>
