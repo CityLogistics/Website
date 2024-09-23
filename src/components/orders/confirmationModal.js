@@ -104,7 +104,7 @@ const ConfirmOrderModal = ({
                 </h2>
 
                 {/* Vehicle Options */}
-                <div className="flex flex-col md:flex-row  mb-4">
+                <div className="flex flex-col md:flex-row mb-4">
                   {deliveryOptions.slice(0, 1).map((option, index) => (
                     <div
                       key={index}
@@ -112,13 +112,7 @@ const ConfirmOrderModal = ({
                         selectedOption === option.value
                           ? "bg-primary"
                           : "bg-[#EFEFEF] hover:bg-primary"
-                      } p-2 ${
-                        index === 0
-                          ? "ml-auto"
-                          : index === 1
-                          ? "mx-auto"
-                          : "mr-auto"
-                      }`}
+                      } p-2`}
                       onClick={() => handleSelection(option.value)}
                     >
                       <img
