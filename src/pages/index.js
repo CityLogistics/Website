@@ -7,6 +7,8 @@ import DriverRecruitment from "@/components/home/driverRecruitment";
 import AboutUs from "@/components/home/aboutUs";
 import WhoWeAre from "@/components/home/whoWeAre";
 import Footer from "@/components/layout/footer";
+import DeliveryForm from "@/components/home/deliveryForm";
+import Testimonials from "@/components/home/testimonials";
 
 export default function Home() {
   const [showScroll, setShowScroll] = useState(false);
@@ -42,9 +44,13 @@ export default function Home() {
         <section id="what-we-do">
           <WhatWeDo />
         </section>
-        <section id="request-delivery">
+        <section id="our-vehicles">
           <RequestDelivery />
         </section>
+        <section id="request-delivery">
+          <DeliveryForm />
+        </section>
+
         <section id="driver-recruitment">
           <DriverRecruitment />
         </section>
@@ -54,6 +60,9 @@ export default function Home() {
       </section>
       <section id="who-we-are">
         <WhoWeAre />
+      </section>
+      <section id="testimonials">
+        <Testimonials />
       </section>
       <section id="footer">
         <Footer />

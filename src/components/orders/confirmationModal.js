@@ -180,7 +180,7 @@ const ConfirmOrderModal = ({
                 <FilledInput
                   type="text"
                   name="price"
-                  title="Vehicle Size Price"
+                  title="Vehicle Base Price"
                   customStyle="h-[60px] text-xl text-black"
                   value={`$${basePrice / 100}`}
                   disabled

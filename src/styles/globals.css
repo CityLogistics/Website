@@ -14,6 +14,36 @@ body {
   }
 }
 
+/* .swiper {
+  width: 100%;
+  height: 100%;
+} */
+
+
+/* .swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+} */
+
+.swiper-pag { 
+  background-color: #E5E7EB;
+}
+
+
+.swiper-pag-active {  
+  background-color: #61AB6987;
+  animation-name: countingBar;
+  animation-duration: 3s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: 1;
+  animation-direction: alternate ;
+  animation-fill-mode:forwards;
+}
+
 
 .success-container {
   text-align: center;

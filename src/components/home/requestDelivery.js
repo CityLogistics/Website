@@ -123,9 +123,6 @@ const RequestDelivery = () => {
             </div>
           ))}
         </div>
-
-        {/* Pass necessary props to the form */}
-        <DeliveryForm selectedOption={selectedOption} />
       </div>
     </div>
   );

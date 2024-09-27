@@ -17,6 +17,10 @@ export const routes = [
 
   {
     name: "Our Vehicles",
+    path: "our-vehicles", // ID of the section
+  },
+  {
+    name: "Request Order",
     path: "request-delivery", // ID of the section
   },
   {
@@ -31,10 +35,10 @@ export const routes = [
     name: "Contact Us",
     path: "footer", // ID of the section
   },
-  // {
-  //   name: "Testimonials",
-  //   path: "testimonials", // ID of the section
-  // },
+  {
+    name: "Testimonials",
+    path: "testimonials", // ID of the section
+  },
 ];
 
 const Navbar = ({ isGradient }) => {
@@ -131,7 +135,7 @@ const Navbar = ({ isGradient }) => {
               <div key={route.name}>
                 <p
                   onClick={() => handleNavClick(route.path)}
-                  className={`cursor-pointer font-serif text-base hover:text-primary ${
+                  className={`cursor-pointer font-serif text-base hover:text-primary font-bold ${
                     isGradient ? "text-white" : "text-black"
                   }`}
                 >

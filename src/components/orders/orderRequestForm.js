@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PhoneInput from "../elements/phoneInput";
 import { useSearchParams } from "next/navigation";
+import DateTimePicker from "../elements/customDatePicker";
 
 const OrderRequestForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -256,7 +257,21 @@ const OrderRequestForm = () => {
           onBlur={formik.handleBlur}
           error={formik.touched.pickuptime && formik.errors.pickuptime}
         />
+        {/* <DateTimePicker
+          name="pickUpDate"
+          label="Pickup Date"
+          value={formik.values.pickUpDate}
+          onChange={formik.handleChange}
+          error={formik.touched.pickUpDate && formik.errors.pickUpDate}
+        />
 
+        <DateTimePicker
+          name="pickUpTime"
+          label="Pickup Time"
+          value={formik.values.pickUpTime}
+          onChange={formik.handleChange}
+          error={formik.touched.pickUpTime && formik.errors.pickUpTime}
+        /> */}
         <FilledInput
           type="text"
           name="recipientName"

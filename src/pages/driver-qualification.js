@@ -20,7 +20,7 @@ const DriverQualification = () => {
         <Navbar isGradient />
         <DriverHero />
       </div>
-      <div className="mt-3 md:mt-[120vh]">
+      <div className="mt-3 md:mt-[170vh]">
         <Footer />
       </div>
     </div>

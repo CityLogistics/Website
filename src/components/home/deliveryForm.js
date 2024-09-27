@@ -6,10 +6,12 @@ import MapPicker from "../elements/mapPicker";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 /* eslint-disable react/no-unescaped-entities */
-const DeliveryForm = ({ selectedOption }) => {
+const DeliveryForm = () => {
   const ready = async () => {};
+  const [selectedOption, setSelectedOption] = useState("FIVE_SEATER_SUV");
 
   const handlePickUpLocationChange = (val, filed) => {
     formik.setFieldValue(filed, val);

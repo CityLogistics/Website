@@ -37,6 +37,10 @@ const DriverRequestForm = () => {
     hasValidVehicleInsurance: yup
       .string()
       .required("Insurance status is required"),
+    provinces: yup
+      .array()
+      .min(1, "Please select at least one Province")
+      .required("Province is required"),
     availabiltyDays: yup
       .array()
       .min(1, "Please select at least one day of availability")
@@ -45,7 +49,10 @@ const DriverRequestForm = () => {
       .array()
       .min(1, "Please select at least one day of availability")
       .required("Time available is required"),
-    preferredTimeZone: yup.string().required("Delivery zone is required"),
+    preferredTimeZone: yup
+      .array()
+      .min(1, "Please select at least one delivery zone")
+      .required("Delivery zone is required"),
     image: yup.string().required("Image is required"),
   });
 
@@ -64,9 +71,10 @@ const DriverRequestForm = () => {
       vehicleType: "",
       hasValidLicense: "true",
       hasValidVehicleInsurance: "true",
+      provinces: [],
       availabiltyDays: [],
       availabiltyTime: [],
-      preferredTimeZone: "",
+      preferredTimeZone: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -79,6 +87,7 @@ const DriverRequestForm = () => {
         availabiltyDays,
         availabiltyTime,
         phoneNumber,
+        provinces,
         ...others
       } = values;
 
@@ -90,8 +99,9 @@ const DriverRequestForm = () => {
         availabiltyDays: availabiltyDays,
         availabiltyTime: availabiltyTime,
         phoneNumber: formatPhoneNumber(phoneNumber),
+        provinces: provinces,
       };
-
+      // console.log(payLoad);
       if (isTrueSet(ownVehicle)) payLoad["vehicleType"] = vehicleType;
 
       try {
@@ -139,15 +149,27 @@ const DriverRequestForm = () => {
     { value: "MORNING", title: "Mornings (8 am to 12 noon)" },
     { value: "AFTERNOON", title: "Afternoons (12 pm to 5 pm)" },
     { value: "EVENING", title: "Evenings (5 pm to 9 pm)" },
-    { value: "NIGHT", title: "Night (9 pm to 8 am)" },
+    { value: "NIGHT", title: "Night (8 pm to 11:59 pm)" },
   ];
 
   const deliveryZoneOptions = [
-    { value: "", title: "Select preferred delivery zone" },
     { value: "west", title: "West side" },
     { value: "east", title: "East side" },
     { value: "north", title: "North side" },
     { value: "south", title: "South side" },
+  ];
+
+  const provinces = [
+    { value: "ALBERTA", title: "Alberta" },
+    { value: "BRITISH_COLUMBIA", title: "British Columbia" },
+    { value: "MANITOBA", title: "Manitoba" },
+    { value: "NEWFOUNDLAND_AND_LABRADOR", title: "Newfoundland and Labrador" },
+    { value: "NEW_BRUNSWICK", title: "New Brunswick" },
+    { value: "NOVA_SCOTIA", title: "Nova Scotia" },
+    { value: "ONTARIO", title: "Ontario" },
+    { value: "PRINCE_EDWARD_ISLAND", title: "Prince Edward Island" },
+    { value: "QUEBEC", title: "Quebec" },
+    { value: "SASKATCHEWAN", title: "Saskatchewan" },
   ];
 
   return (
@@ -170,7 +192,7 @@ const DriverRequestForm = () => {
         <FilledInput
           type="text"
           name="firstName"
-          title="Driver's Name"
+          title="First Name"
           placeholder="Your first name"
           value={formik.values.firstName}
           onChange={formik.handleChange}
@@ -181,7 +203,7 @@ const DriverRequestForm = () => {
         <FilledInput
           type="text"
           name="lastName"
-          title="Driver's Name"
+          title="Last Name"
           placeholder="Your last name"
           value={formik.values.lastName}
           onChange={formik.handleChange}
@@ -273,6 +295,19 @@ const DriverRequestForm = () => {
             formik.errors.hasValidVehicleInsurance
           }
         />
+        <MultipleCheckboxGrid
+          name="provinces"
+          title="Please select the Province(s) you can deliver within"
+          options={provinces}
+          value={formik.values.provinces}
+          onChange={formik.handleChange}
+          customStyle={
+            formik.touched.provinces && formik.errors.provinces
+              ? "border-red-500"
+              : ""
+          }
+          error={formik.touched.provinces && formik.errors.provinces}
+        />
 
         <MultipleCheckboxGrid
           name="availabiltyDays"
@@ -306,7 +341,7 @@ const DriverRequestForm = () => {
           }
         />
 
-        <Dropdown
+        <MultipleCheckboxGrid
           name="preferredTimeZone"
           title="Preferred zone for delivery"
           options={deliveryZoneOptions}
