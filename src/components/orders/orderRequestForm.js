@@ -139,6 +139,9 @@ const OrderRequestForm = () => {
     const { pickupLoc, dropOffLoc } = isModalOpen;
 
     setLoading(true);
+
+    localStorage.setItem("submittedData", JSON.stringify(formik.values));
+
     const { senderPhone, recipientPhone, pickup, dropoff, ...values } =
       formik.values;
 
@@ -175,9 +178,12 @@ const OrderRequestForm = () => {
   const search = useSearchParams();
 
   useEffect(() => {
-    const res = JSON.parse(search.get("data"));
-    // const res = JSON.parse(localStorage.getItem("payload"));
-    if (res) formik.setValues(res);
+    const submittedData = localStorage.getItem("submittedData");
+    if (submittedData) formik.setValues(JSON.parse(submittedData));
+    else {
+      const res = JSON.parse(search.get("data"));
+      if (res) formik.setValues(res);
+    }
   }, [search]);
 
   return (
@@ -335,15 +341,17 @@ const OrderRequestForm = () => {
           </PrimaryButton>
         </div>
       </form>
-      <ConfirmOrderModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        pickUpLocation={formik.values.pickup}
-        dropOffLocation={formik.values.dropoff}
-        onConfirm={onConfirm}
-        preselectedVehicleType={formik.values.vehicleType}
-        loading={loading}
-      />
+      {isModalOpen && (
+        <ConfirmOrderModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          pickUpLocation={formik.values.pickup}
+          dropOffLocation={formik.values.dropoff}
+          onConfirm={onConfirm}
+          preselectedVehicleType={formik.values.vehicleType}
+          loading={loading}
+        />
+      )}
     </div>
   );
 };
