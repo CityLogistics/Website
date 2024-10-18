@@ -1,7 +1,9 @@
 import DriverHero from "@/components/driverQualification/hero";
 import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
+const queryClient = new QueryClient();
 
 const DriverQualification = () => {
   return (
@@ -18,7 +20,9 @@ const DriverQualification = () => {
         }}
       >
         <Navbar isGradient />
-        <DriverHero />
+        <QueryClientProvider client={queryClient}>
+          <DriverHero />
+        </QueryClientProvider>
       </div>
       <div className="mt-3 md:mt-[170vh]">
         <Footer />

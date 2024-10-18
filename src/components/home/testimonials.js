@@ -112,7 +112,6 @@ const Testimonials = () => {
         }}
         modules={[Autoplay]}
         onSlideChange={(properties) => {
-          console.log(properties);
           setActiveIndex(properties.activeIndex);
         }}
       >

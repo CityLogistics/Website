@@ -49,6 +49,10 @@ export async function codeAddress(place) {
             (v) => v.types[0] == "administrative_area_level_1"
           )?.long_name;
 
+          const city = results[0].address_components.find(
+            (v) => v.types[0] == "locality"
+          )?.long_name;
+
           resolve({
             province: province.toUpperCase(),
             country: "string",
@@ -56,6 +60,7 @@ export async function codeAddress(place) {
             placeId: place_id,
             lat: results[0].geometry?.location?.lat(),
             lng: results[0].geometry?.location?.lng(),
+            city: city.toUpperCase(),
           });
         }
       } else {

@@ -15,6 +15,7 @@ import { WidgetLoader } from "react-cloudinary-upload-widget";
 import ImageInput from "../elements/ImageInput";
 import MultipleCheckboxGrid from "../elements/multipleCheckBox";
 import ImageComponent from "../ImageComponent";
+import { useQuery } from "@tanstack/react-query";
 
 const DriverRequestForm = () => {
   // Validation schema
@@ -40,6 +41,10 @@ const DriverRequestForm = () => {
     provinces: yup
       .array()
       .min(1, "Please select at least one Province")
+      .required("Province is required"),
+    cities: yup
+      .array()
+      .min(1, "Please select at least one City")
       .required("Province is required"),
     availabiltyDays: yup
       .array()
@@ -72,6 +77,7 @@ const DriverRequestForm = () => {
       hasValidLicense: "true",
       hasValidVehicleInsurance: "true",
       provinces: [],
+      cities: [],
       availabiltyDays: [],
       availabiltyTime: [],
       preferredTimeZone: [],
@@ -88,6 +94,7 @@ const DriverRequestForm = () => {
         availabiltyTime,
         phoneNumber,
         provinces,
+        preferredTimeZone,
         ...others
       } = values;
 
@@ -100,8 +107,8 @@ const DriverRequestForm = () => {
         availabiltyTime: availabiltyTime,
         phoneNumber: formatPhoneNumber(phoneNumber),
         provinces: provinces,
+        preferredTimeZone: preferredTimeZone.join(","),
       };
-      // console.log(payLoad);
       if (isTrueSet(ownVehicle)) payLoad["vehicleType"] = vehicleType;
 
       try {
@@ -122,6 +129,19 @@ const DriverRequestForm = () => {
       }
     },
   });
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ["cities", formik.values.provinces],
+    queryFn: () =>
+      instance.get("/cities/find-by-provinces", {
+        params: { provinces: formik.values.provinces, page: 0, limit: 100 },
+      }),
+  });
+
+  const cities = (data?.data?.data ?? []).map((v) => ({
+    title: v.name,
+    value: v._id,
+  }));
 
   const boolOptions = [
     { value: "true", title: "Yes" },
@@ -308,6 +328,28 @@ const DriverRequestForm = () => {
           }
           error={formik.touched.provinces && formik.errors.provinces}
         />
+
+        {isPending ? (
+          <Loader />
+        ) : (
+          <>
+            {formik.values.provinces.length > 0 && (
+              <MultipleCheckboxGrid
+                name="cities"
+                title="Please select the Cities(s) you can deliver within"
+                options={cities}
+                value={formik.values.cities}
+                onChange={formik.handleChange}
+                customStyle={
+                  formik.touched.cities && formik.errors.cities
+                    ? "border-red-500"
+                    : ""
+                }
+                error={formik.touched.cities && formik.errors.cities}
+              />
+            )}
+          </>
+        )}
 
         <MultipleCheckboxGrid
           name="availabiltyDays"
