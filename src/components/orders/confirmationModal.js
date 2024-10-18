@@ -52,7 +52,7 @@ const ConfirmOrderModal = ({
       <Dialog
         as="div"
         className="font-sans fixed inset-0 z-[99999999] flex items-center justify-center"
-        onClose={loading ? () => null : () => onClose()}
+        onClose={() => null}
       >
         <TransitionChild
           as={Fragment}
