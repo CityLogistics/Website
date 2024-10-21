@@ -179,8 +179,11 @@ const OrderRequestForm = () => {
 
   useEffect(() => {
     const submittedData = localStorage.getItem("submittedData");
-    if (submittedData) formik.setValues(JSON.parse(submittedData));
-    else {
+
+    if (submittedData) {
+      formik.setValues(JSON.parse(submittedData));
+      localStorage.removeItem("submittedData");
+    } else {
       const res = JSON.parse(search.get("data"));
       if (res) formik.setValues(res);
     }
