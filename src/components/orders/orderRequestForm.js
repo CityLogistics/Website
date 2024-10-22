@@ -70,6 +70,11 @@ const OrderRequestForm = () => {
     pickuptime: yup
       .string("Enter pickup time")
       .required("Pickup time is required"),
+    pickupDate: yup
+      .date()
+      .min(new Date(), "Pickup date cannot be in the past")
+      .required("Pickup date is required")
+      .typeError("Invalid date format"),
   });
 
   const formik = useFormik({
@@ -84,6 +89,7 @@ const OrderRequestForm = () => {
       pickup: {},
       pickuptime: "",
       vehicleType: "",
+      pickupDate: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -142,12 +148,18 @@ const OrderRequestForm = () => {
 
     localStorage.setItem("submittedData", JSON.stringify(formik.values));
 
-    const { senderPhone, recipientPhone, pickup, dropoff, ...values } =
-      formik.values;
+    const {
+      senderPhone,
+      recipientPhone,
+      pickup,
+      dropoff,
+      pickupDate,
+      ...values
+    } = formik.values;
 
     try {
       const payload = {
-        pickupDate: new Date().toISOString(),
+        pickupDate: pickupDate,
         pickupPhoneNumber: formatPhoneNumber(senderPhone),
         dropOffPhoneNumber: formatPhoneNumber(recipientPhone),
         type: "HEALTH_AND_MEDICINE",
@@ -230,6 +242,9 @@ const OrderRequestForm = () => {
               // onChange={handlePickUpLocationChange}
               onBlur={formik.handleBlur}
               // error={pickupError}
+              error={
+                formik.touched.pickup && formik.errors?.pickup?.description
+              }
             />
           )}
           value={formik.values?.pickup?.description}
@@ -248,13 +263,13 @@ const OrderRequestForm = () => {
 
         <FilledInput
           type="date"
-          name="pickUpDate"
+          name="pickupDate"
           title="Pickup Date"
           placeholder="Pick a date"
-          value={formik.values?.pickUpDate}
+          value={formik.values?.pickupDate}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.pickUpDate && formik.errors.pickUpDate}
+          error={formik.touched.pickupDate && formik.errors.pickupDate}
         />
         <FilledInput
           type="time"
@@ -264,14 +279,16 @@ const OrderRequestForm = () => {
           value={formik.values.pickuptime}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.pickuptime && formik.errors.pickuptime}
+          error={
+            formik.touched.pickuptime && formik.errors?.pickuptime?.description
+          }
         />
         {/* <DateTimePicker
-          name="pickUpDate"
+          name="pickupDate"
           label="Pickup Date"
-          value={formik.values.pickUpDate}
+          value={formik.values.pickupDate}
           onChange={formik.handleChange}
-          error={formik.touched.pickUpDate && formik.errors.pickUpDate}
+          error={formik.touched.pickupDate && formik.errors.pickupDate}
         />
 
         <DateTimePicker
@@ -302,10 +319,12 @@ const OrderRequestForm = () => {
               value={formik.values.dropoff?.description}
               // onChange={handleDropOffLocationChange}
               onBlur={formik.handleBlur}
-              // error={dropOffError}
+              error={
+                formik.touched.dropoff && formik.errors.dropoff?.description
+              }
             />
           )}
-          value={formik.values.dropoff?.description}
+          value={formik.values.dropoff}
           onChange={(e) => handlePickUpLocationChange(e, "dropoff")}
         />
 
