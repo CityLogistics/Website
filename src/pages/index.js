@@ -34,6 +34,10 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    localStorage.removeItem("submittedData");
+  }, []);
+
   return (
     <div>
       <Navbar />
