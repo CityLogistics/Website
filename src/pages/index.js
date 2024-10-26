@@ -9,6 +9,7 @@ import WhoWeAre from "@/components/home/whoWeAre";
 import Footer from "@/components/layout/footer";
 import DeliveryForm from "@/components/home/deliveryForm";
 import Testimonials from "@/components/home/testimonials";
+import { Toaster } from "sonner";
 
 export default function Home() {
   const [showScroll, setShowScroll] = useState(false);
@@ -40,6 +41,8 @@ export default function Home() {
 
   return (
     <div>
+      <Toaster richColors position="top-center" />
+
       <Navbar />
       <div className="h-fit bg-white">
         <section id="hero">
@@ -65,9 +68,7 @@ export default function Home() {
       <section id="who-we-are">
         <WhoWeAre />
       </section>
-      <section id="testimonials">
-        <Testimonials />
-      </section>
+      <section id="testimonials">{/* <Testimonials /> */}</section>
       <section id="footer">
         <Footer />
       </section>

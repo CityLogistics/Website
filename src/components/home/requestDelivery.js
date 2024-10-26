@@ -3,8 +3,17 @@ import { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import DeliveryForm from "./deliveryForm";
+import ManualOrderRequestForm from "../orders/manualOrderRequestForm";
 
 const RequestDelivery = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = (vehicleType) => {
+    setIsModalOpen(vehicleType);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const [selectedOption, setSelectedOption] = useState(null);
 
   const cardRefs = useRef([]);
@@ -77,6 +86,7 @@ const RequestDelivery = () => {
                       <button
                         type="button"
                         className="flex items-center justify-center w-full font-serif text-sm text-white md:text-base"
+                        onClick={() => openModal(option.value)}
                       >
                         <p>Request a quote</p>
                         <svg
@@ -124,6 +134,13 @@ const RequestDelivery = () => {
           ))}
         </div>
       </div>
+      {isModalOpen && (
+        <ManualOrderRequestForm
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          vehicleType={isModalOpen}
+        />
+      )}
     </div>
   );
 };

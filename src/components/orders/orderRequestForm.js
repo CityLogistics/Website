@@ -69,6 +69,27 @@ const OrderRequestForm = () => {
     discription: yup.string("Enter description"),
     pickuptime: yup
       .string("Enter pickup time")
+      .test(
+        "is-future-time",
+        "Pickup time must be later than the current time",
+        (value) => {
+          if (!value) return false;
+
+          // Get the current time
+          const now = new Date();
+          const currentHours = now.getHours();
+          const currentMinutes = now.getMinutes();
+
+          // Split input time into hours and minutes
+          const [inputHours, inputMinutes] = value.split(":").map(Number);
+
+          // Compare input time to the current time
+          return (
+            inputHours > currentHours ||
+            (inputHours === currentHours && inputMinutes > currentMinutes)
+          );
+        }
+      )
       .required("Pickup time is required"),
     pickupDate: yup
       .date()
@@ -279,9 +300,7 @@ const OrderRequestForm = () => {
           value={formik.values.pickuptime}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.pickuptime && formik.errors?.pickuptime?.description
-          }
+          error={formik.touched.pickuptime && formik.errors?.pickuptime}
         />
         {/* <DateTimePicker
           name="pickupDate"
