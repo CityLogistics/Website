@@ -76,35 +76,35 @@ const RequestDelivery = () => {
                     <p className="font-serif text-sm md:text-base md:mb-2 ">
                       To get the price of this?
                     </p>
-                    <a
+                    {/* <a
                       href={`${
                         index === 1
                           ? "mailto:info@mycitylogistics.ca?subject=Quote Request for Large (Bus) Vehicle&body=I would like to request a quote for the Large (Bus) vehicle."
                           : "mailto:info@mycitylogistics.ca?subject=Quote Request for Extra Large (Truck) Vehicle&body=I would like to request a quote for the Extra Large (Truck) vehicle."
                       }`}
+                    > */}
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-full font-serif text-sm text-white md:text-base"
+                      onClick={() => openModal(option.value)}
                     >
-                      <button
-                        type="button"
-                        className="flex items-center justify-center w-full font-serif text-sm text-white md:text-base"
-                        onClick={() => openModal(option.value)}
+                      <p>Request a quote</p>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="size-4"
                       >
-                        <p>Request a quote</p>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="size-4"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                          />
-                        </svg>
-                      </button>
-                    </a>
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </button>
+                    {/* </a> */}
                   </div>
                 )}
               </div>

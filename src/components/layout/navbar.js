@@ -35,10 +35,10 @@ export const routes = [
     name: "Contact Us",
     path: "footer", // ID of the section
   },
-  {
-    name: "Testimonials",
-    path: "testimonials", // ID of the section
-  },
+  // {
+  //   name: "Testimonials",
+  //   path: "testimonials", // ID of the section
+  // },
 ];
 
 const Navbar = ({ isGradient }) => {

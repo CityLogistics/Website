@@ -181,7 +181,7 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
       <Dialog
         as="div"
         className="font-sans fixed inset-0 z-[99999999] flex items-center justify-center"
-        onClose={() => onClose()}
+        onClose={() => null}
       >
         <TransitionChild
           as={Fragment}
@@ -206,6 +206,25 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
             leaveTo="opacity-0 scale-95"
           >
             <DialogPanel className="w-full h-full px-[5%] py-6 mb-[10vh] bg-white text-left align-middle rounded-[20px] shadow-xl transition-all overflow-y-auto">
+              <button
+                onClick={loading ? () => null : () => onClose()}
+                className="absolute top-0 right-4 text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 text-black"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
               <form
                 onSubmit={formik.handleSubmit}
                 className="font-serif w-full"
@@ -355,7 +374,7 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
                   type="text"
                   name="discription"
                   title="Item Description"
-                  placeholder="Describe the item..."
+                  placeholder="Please give a full description (size, make, etc.) of the item..."
                   value={formik.values.discription}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
