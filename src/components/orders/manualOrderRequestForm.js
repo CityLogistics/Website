@@ -208,7 +208,7 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
             <DialogPanel className="w-full h-full px-[5%] py-6 mb-[10vh] bg-white text-left align-middle rounded-[20px] shadow-xl transition-all overflow-y-auto">
               <button
                 onClick={loading ? () => null : () => onClose()}
-                className="absolute top-[-10px] right-7 text-gray-500 hover:text-gray-700"
+                className="absolute top-[-7px] right-9 sm:right-5 text-gray-500 hover:text-gray-700"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
