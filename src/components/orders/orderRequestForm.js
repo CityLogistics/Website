@@ -21,6 +21,10 @@ import { useSearchParams } from "next/navigation";
 import DateTimePicker from "../elements/customDatePicker";
 
 const OrderRequestForm = () => {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = (distance) => {
     setIsModalOpen(distance);
@@ -93,7 +97,7 @@ const OrderRequestForm = () => {
       .required("Pickup time is required"),
     pickupDate: yup
       .date()
-      .min(new Date(), "Pickup date cannot be in the past")
+      .min(yesterday, "Pickup date cannot be in the past")
       .required("Pickup date is required")
       .typeError("Invalid date format"),
   });
