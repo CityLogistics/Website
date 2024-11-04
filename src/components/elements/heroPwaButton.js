@@ -41,10 +41,12 @@ export default function HeroInstallPWAButton() {
 
   if (isIos) {
     return (
-      <div className="mt-[75px]">
-        <div className="font-bold mb-4">Install App on iOS</div>
-        <div className="text-white text-[13px] md:text-sm">
-          To install this app on your iPhone/iPad, tap <strong>Share</strong>{" "}
+      <div className="mt-[2vh] px-[5%] w-full">
+        <div className="w-full text-white bg-primary rounded-[15px] p-3 text-[17px] md:text-sm text-center font-medium mb-4">
+          Install App
+        </div>
+        <div className="font-serif text-center text-[13px] md:text-sm">
+          To install this app, click on the <strong>Share</strong> button, and
           then <strong>Add to Home Screen</strong>.
         </div>
       </div>
