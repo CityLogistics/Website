@@ -37,7 +37,7 @@ function FilledInput({
         onFocus={(e) => {
           // Trigger the picker for both date and time types
           if (type === "date" || type === "time") {
-            e.target.showPicker(); // Show the picker when focused
+            e.target?.showPicker(); // Show the picker when focused
           }
         }}
       />

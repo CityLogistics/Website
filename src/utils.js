@@ -54,13 +54,13 @@ export async function codeAddress(place) {
           )?.long_name;
 
           resolve({
-            province: province.toUpperCase(),
+            province: province?.toUpperCase(),
             country: "string",
             address: description,
             placeId: place_id,
             lat: results[0].geometry?.location?.lat(),
             lng: results[0].geometry?.location?.lng(),
-            city: city.toUpperCase(),
+            city: city?.toUpperCase() ?? "",
           });
         }
       } else {
