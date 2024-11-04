@@ -1,10 +1,33 @@
+import { useEffect, useState } from "react";
+import HeroInstallPWAButton from "../elements/heroPwaButton";
+
 /* eslint-disable @next/next/no-img-element */
 const WhatWeDo = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Function to check screen width and set isMobile state
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 700);
+  };
+
+  useEffect(() => {
+    // Set initial state
+    handleResize();
+
+    // Add event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <div className="flex justify-center">
-      <div className="px-[5%] max-w-8xl">
+      <div className="px-[5%] max-w-8xl mt-[35vh] sm:mt-[35vh] md:mt-[80vh] lg:mt-[70vh]">
+        {isMobile && <HeroInstallPWAButton />}
         <div
-          className="w-full bg-[url('/images/second_bg.svg')] py-8 rounded-5 md:rounded-[65px] mt-[35vh] sm:mt-[35vh] md:mt-[80vh] lg:mt-[70vh] relative z-0"
+          className="w-full bg-[url('/images/second_bg.svg')] py-8 rounded-5 md:rounded-[65px]  relative z-0"
           style={{
             backgroundPosition: "center center",
             backgroundSize: "cover",
