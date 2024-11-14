@@ -153,7 +153,7 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
 
         if (status == 201 && data) {
           toast.success("Order request sent");
-          // onClose();
+          onClose();
         } else toast.error(parseError(error));
       } catch (error) {
         setLoading(false);
