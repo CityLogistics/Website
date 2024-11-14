@@ -54,7 +54,7 @@ export async function codeAddress(place) {
           )?.long_name;
 
           resolve({
-            province: province?.toUpperCase(),
+            province: province?.trim()?.toUpperCase()?.replace(" ", "_"),
             country: "string",
             address: description,
             placeId: place_id,
