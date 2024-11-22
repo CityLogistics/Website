@@ -143,12 +143,10 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
           vehicleType,
           pickupAddress: pickupLoc,
           dropOffAddress: dropOffLoc,
+          orderProcessType: "MANUAL",
         };
 
-        const { status, error, data } = await instance.post(
-          "/manual-orders",
-          payload
-        );
+        const { status, error, data } = await instance.post("/orders", payload);
         setLoading(false);
 
         if (status == 201 && data) {
