@@ -31,9 +31,9 @@ function FilledInput({
         onChange={onChange}
         onBlur={onBlur}
         placeholder={placeholder}
-        min={
-          type === "date" ? new Date().toISOString().split("T")[0] : undefined
-        } // Set min date if it's a date picker
+        // min={
+        //   type === "date" ? new Date().toISOString().split("T")[0] : undefined
+        // } // Set min date if it's a date picker
         onFocus={(e) => {
           // Trigger the picker for both date and time types
           if (type === "date" || type === "time") {
