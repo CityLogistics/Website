@@ -74,36 +74,36 @@ const OrderRequestForm = () => {
 
     pickuptime: yup
       .string("Enter pickup time")
-      .when("pickupDate", {
-        is: (pickupDate, _) => {
-          var pickupDateF = `${pickupDate?.getFullYear()},${pickupDate?.getMonth()},${pickupDate?.getDate()}`;
-          var todayF = `${today.getFullYear()},${today.getMonth()},${today.getDate()}`;
-          return pickupDateF == todayF;
-        },
-        then: (schema) =>
-          schema.test(
-            "is-future-time",
-            "Pickup time must be later than the current time",
-            (value) => {
-              if (!value) return false;
+      // .when("pickupDate", {
+      //   is: (pickupDate, _) => {
+      //     var pickupDateF = `${pickupDate?.getFullYear()},${pickupDate?.getMonth()},${pickupDate?.getDate()}`;
+      //     var todayF = `${today.getFullYear()},${today.getMonth()},${today.getDate()}`;
+      //     return pickupDateF == todayF;
+      //   },
+      //   then: (schema) =>
+      //     schema.test(
+      //       "is-future-time",
+      //       "Pickup time must be later than the current time",
+      //       (value) => {
+      //         if (!value) return false;
 
-              // Get the current time
-              const now = new Date();
-              const currentHours = now.getHours();
-              const currentMinutes = now.getMinutes();
+      //         // Get the current time
+      //         const now = new Date();
+      //         const currentHours = now.getHours();
+      //         const currentMinutes = now.getMinutes();
 
-              // Split input time into hours and minutes
-              const [inputHours, inputMinutes] = value.split(":").map(Number);
+      //         // Split input time into hours and minutes
+      //         const [inputHours, inputMinutes] = value.split(":").map(Number);
 
-              // Compare input time to the current time
-              return (
-                inputHours > currentHours ||
-                (inputHours === currentHours && inputMinutes > currentMinutes)
-              );
-            }
-          ),
-        otherwise: (schema) => schema.required("Pickup time is required"),
-      })
+      //         // Compare input time to the current time
+      //         return (
+      //           inputHours > currentHours ||
+      //           (inputHours === currentHours && inputMinutes > currentMinutes)
+      //         );
+      //       }
+      //     ),
+      //   otherwise: (schema) => schema.required("Pickup time is required"),
+      // })
       .required("Pickup time is required"),
     pickupDate: yup
       .date()
