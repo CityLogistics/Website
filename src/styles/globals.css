@@ -10,7 +10,7 @@ body {
 
 @layer utilities {
   .back-grad {
-    background: linear-gradient(to bottom, #FFEFE2, #FFFFFF, #FFEFE2);
+    background: linear-gradient(to bottom, #ffefe2, #ffffff, #ffefe2);
   }
 }
 
@@ -18,7 +18,6 @@ body {
   width: 100%;
   height: 100%;
 } */
-
 
 /* .swiper-slide {
   text-align: center;
@@ -29,21 +28,19 @@ body {
   z-index: 1;
 } */
 
-.swiper-pag { 
-  background-color: #E5E7EB;
+.swiper-pag {
+  background-color: #e5e7eb;
 }
 
-
-.swiper-pag-active {  
-  background-color: #61AB6987;
+.swiper-pag-active {
+  background-color: #61ab6987;
   animation-name: countingBar;
   animation-duration: 3s;
   animation-timing-function: ease-in;
   animation-iteration-count: 1;
-  animation-direction: alternate ;
-  animation-fill-mode:forwards;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
 }
-
 
 .success-container {
   text-align: center;
@@ -113,4 +110,8 @@ body {
 
 input::-webkit-date-and-time-value {
   text-align: left;
+}
+
+.MuiPickersPopper-root {
+  z-index: 10000000;
 }

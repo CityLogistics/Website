@@ -8,7 +8,6 @@ import MapPicker from "../elements/mapPicker";
 import Loader from "../Loader";
 import { codeAddress, formatPhoneNumber, parseError } from "@/utils";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import PhoneInput from "../elements/phoneInput";
 import { useSearchParams } from "next/navigation";
 import {
@@ -17,6 +16,7 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
+import TimeInput from "../elements/TimeInput";
 
 const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
   const today = new Date();
@@ -161,8 +161,6 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
     },
   });
 
-  const router = useRouter();
-
   const [loading, setLoading] = useState(false);
 
   const handlePickUpLocationChange = (val, filed) => {
@@ -187,7 +185,7 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
     <Transition appear show={Boolean(isOpen)} as={Fragment}>
       <Dialog
         as="div"
-        className="font-sans fixed inset-0 z-[99999999] flex items-center justify-center"
+        className="font-sans fixed inset-0 z-[99] flex items-center justify-center"
         onClose={() => null}
       >
         <TransitionChild
@@ -308,13 +306,12 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
                   onBlur={formik.handleBlur}
                   error={formik.touched.pickupDate && formik.errors.pickupDate}
                 />
-                <FilledInput
-                  type="time"
+                <TimeInput
                   name="pickuptime"
                   title="Pickup Time"
+                  onChange={(v) => formik.setFieldValue("pickuptime", v)}
                   placeholder="Select time..."
                   value={formik.values.pickuptime}
-                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.pickuptime && formik.errors?.pickuptime}
                 />

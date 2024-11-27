@@ -18,7 +18,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PhoneInput from "../elements/phoneInput";
 import { useSearchParams } from "next/navigation";
-import DateTimePicker from "../elements/customDatePicker";
+// import DateTimePicker from "../elements/customDatePicker";
+import TimeInput from "../elements/TimeInput";
 
 const OrderRequestForm = () => {
   const today = new Date();
@@ -306,13 +307,12 @@ const OrderRequestForm = () => {
           onBlur={formik.handleBlur}
           error={formik.touched.pickupDate && formik.errors.pickupDate}
         />
-        <FilledInput
-          type="time"
+        <TimeInput
           name="pickuptime"
           title="Pickup Time"
           placeholder="Select time..."
           value={formik.values.pickuptime}
-          onChange={formik.handleChange}
+          onChange={(v) => formik.setFieldValue("pickuptime", v)}
           onBlur={formik.handleBlur}
           error={formik.touched.pickuptime && formik.errors?.pickuptime}
         />
