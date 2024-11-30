@@ -48,9 +48,7 @@ function TimeInput({
           disabled={disabled}
           name={name}
           // value={value}
-          onChange={(v) =>
-            onChange(`${v.hour() < 10 ? "0" : ""}${v.hour()}:${v.minute()}`)
-          }
+          onChange={(v) => onChange(v.format("HH:mm"))}
           onBlur={onBlur}
           placeholder={placeholder}
         />
