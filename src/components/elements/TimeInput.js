@@ -19,6 +19,18 @@ function TimeInput({
           {title}
         </label>
         <TimePicker
+          // slotProps={{
+          //   layout: {
+          //     sx: {
+          //       ul: {
+
+          //         "::-webkit-scrollbar": {
+          //           // width: "2px",
+          //         },
+          //       },
+          //     },
+          //   },
+          // }}
           sx={{
             width: "100%",
             backgroundColor: "#F2F2F2",
@@ -37,7 +49,7 @@ function TimeInput({
           name={name}
           // value={value}
           onChange={(v) =>
-            onChange(`${v.hour() < 10 && "0"}${v.hour()}:${v.minute()}`)
+            onChange(`${v.hour() < 10 ? "0" : ""}${v.hour()}:${v.minute()}`)
           }
           onBlur={onBlur}
           placeholder={placeholder}

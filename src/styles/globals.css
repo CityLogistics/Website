@@ -115,3 +115,7 @@ input::-webkit-date-and-time-value {
 .MuiPickersPopper-root {
   z-index: 10000000;
 }
+
+.MuiMultiSectionDigitalClockSection-root {
+overflow-y: scroll;
+}
