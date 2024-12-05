@@ -150,11 +150,11 @@ const Footer = ({ isGradient }) => {
             <p className="font-bold mb-4">Contact Us</p>
             <p className="text-[10px] md:text-[12px]">
               <a href="tel:+13062512688" className="hover:text-gray-400">
-                (306) 251-2688
+                (306) 251-2088
               </a>{" "}
               or{" "}
               <a href="tel:+13062513269" className="hover:text-gray-400">
-                (306) 251-3269
+                (306) 251-2069
               </a>
             </p>
             <p className="text-[10px] md:text-[12px]">
