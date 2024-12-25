@@ -134,8 +134,10 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
           codeAddress(dropoff),
         ]);
 
+        const formattedPickupDate = new Date(pickupDate).toISOString();
+
         const payload = {
-          pickupDate: pickupDate,
+          pickupDate: formattedPickupDate,
           pickupPhoneNumber: formatPhoneNumber(senderPhone),
           dropOffPhoneNumber: formatPhoneNumber(recipientPhone),
           type: "HEALTH_AND_MEDICINE",

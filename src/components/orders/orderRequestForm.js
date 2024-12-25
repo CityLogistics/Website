@@ -192,10 +192,10 @@ const OrderRequestForm = () => {
       pickupDate,
       ...values
     } = formik.values;
-
+    const formattedPickupDate = new Date(pickupDate).toISOString();
     try {
       const payload = {
-        pickupDate: pickupDate,
+        pickupDate: formattedPickupDate,
         pickupPhoneNumber: formatPhoneNumber(senderPhone),
         dropOffPhoneNumber: formatPhoneNumber(recipientPhone),
         type: "HEALTH_AND_MEDICINE",
