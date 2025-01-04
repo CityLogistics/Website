@@ -11,6 +11,7 @@ import {
   codeAddress,
   formatPhoneNumber,
   getDistace,
+  getFormattedDate,
   getPrice,
   parseError,
 } from "@/utils";
@@ -192,7 +193,9 @@ const OrderRequestForm = () => {
       pickupDate,
       ...values
     } = formik.values;
-    const formattedPickupDate = new Date(pickupDate).toISOString();
+    // capture the timezone
+    const formattedPickupDate = getFormattedDate(pickupDate);
+
     try {
       const payload = {
         pickupDate: formattedPickupDate,

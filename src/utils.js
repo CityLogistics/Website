@@ -173,3 +173,21 @@ export const useCloudinary = (setFile) => {
     launchWidget,
   };
 };
+
+export function getFormattedDate(date) {
+  // handle invalid date object
+  if (!date ) return;
+  const localDate = new Date(`${date}T00:00:00`);
+
+  // Format the date as ISO 8601 with the local timezone offset
+  const timezoneOffsetMinutes = localDate.getTimezoneOffset();
+  const offsetSign = timezoneOffsetMinutes <= 0 ? "+" : "-";
+  const offsetHours = String(Math.abs(Math.floor(timezoneOffsetMinutes / 60))).padStart(2, "0");
+  const offsetMinutes = String(Math.abs(timezoneOffsetMinutes % 60)).padStart(2, "0");
+  const timezoneOffsetFormatted = `${offsetSign}${offsetHours}:${offsetMinutes}`;
+  
+  // Combine the date and timezone offset
+  const validIsoDate = `${localDate.toISOString().split("T")[0]}T00:00:00${timezoneOffsetFormatted}`;
+
+  return validIsoDate;
+}

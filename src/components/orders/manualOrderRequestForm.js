@@ -6,7 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import { instance } from "@/apis";
 import MapPicker from "../elements/mapPicker";
 import Loader from "../Loader";
-import { codeAddress, formatPhoneNumber, parseError } from "@/utils";
+import { codeAddress, formatPhoneNumber, getFormattedDate, parseError } from "@/utils";
 import { toast } from "sonner";
 import PhoneInput from "../elements/phoneInput";
 import { useSearchParams } from "next/navigation";
@@ -134,7 +134,7 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
           codeAddress(dropoff),
         ]);
 
-        const formattedPickupDate = new Date(pickupDate).toISOString();
+        const formattedPickupDate = getFormattedDate(pickupDate);
 
         const payload = {
           pickupDate: formattedPickupDate,
@@ -168,6 +168,7 @@ const ManualOrderRequestForm = ({ isOpen, onClose, vehicleType }) => {
   const handlePickUpLocationChange = (val, filed) => {
     formik.setFieldValue(filed, { ...val, address: val.description });
   };
+
 
   const search = useSearchParams();
 
